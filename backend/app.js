@@ -36,17 +36,6 @@ app.use("/post",postroutes);
 app.use("/stories", storyroutes);
 app.use("/comments", commentroutes);
 
-if (process.env.NODE_ENV ==="production") {
-  app.use(express.static(path.join(_dirname1,"/frontend/build")));
-  app.get("*",(req,res)=>{
-    res.sendFile(path.resolve(_dirname1,"frontend", "build", "index.html"));
-  });
-} else {
-  app.get("/",(req,res)=>{
-    res.send("API is running successfully");
-  });
-}
-
 app.get("/", (req, res) => {
     res.send("API is Activated");
   });
