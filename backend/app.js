@@ -6,11 +6,11 @@ const cors =require("cors");
 
 dotenv.config();
 
-app.use(
-  cors({
-    origin: "*",
-  })
-);
+app.use(cors({
+  origin: "https://incendia-rho.vercel.app", 
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], 
+  credentials: true, 
+}));
 
 const connectDb= async()=>{
   try {
