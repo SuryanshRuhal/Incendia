@@ -5,7 +5,6 @@ import {json, useNavigate} from "react-router-dom";
 import { Backdrop, CircularProgress, } from "@mui/material";
 import VisibilitySharpIcon from '@mui/icons-material/VisibilitySharp';
 import VisibilityOffSharpIcon from '@mui/icons-material/VisibilityOffSharp';
-import { UserContext } from '../context/usercontext';
 
 
 const Signin=()=>{
@@ -16,7 +15,6 @@ const Signin=()=>{
         email:"",
         password:"",
     });
-    const {setUser}=useContext(UserContext);
     const [signin,setsignin]= useState(true);
     const [password, setPassword]= useState(true);
     const [loading,setloading]= useState(false);
@@ -76,7 +74,6 @@ const Signin=()=>{
                 contact,
                 config
             );
-            setUser(response.data);
             localStorage.setItem("userData", JSON.stringify(response));
             setloading(false);
             navigate("/profileInfo");
