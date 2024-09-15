@@ -46,11 +46,10 @@ const Signin=()=>{
                 },
             };
             const response= await axios.post(
-                "http://localhost:8080/user/signin",
+                "https://incendia-api.vercel.app/user/signin",
                 contact,
                 config
             );
-            console.log(response.data);
             localStorage.setItem("userData", JSON.stringify(response));
             setloading(false);
             navigate("/home");
@@ -70,7 +69,7 @@ const Signin=()=>{
             }
     
             const response= await axios.post(
-                "http://localhost:8080/user/register",
+                "https://incendia-api.vercel.app/user/register",
                 contact,
                 config
             );
