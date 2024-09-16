@@ -30,7 +30,7 @@ const ProfilePage = () => {
                 }
             }
             const perticularUser= await axios.get(
-                `http://localhost:8080/user/find/${username}`,
+                `https://incendia-api.vercel.app/user/find/${username}`,
                 config
             );
             setOneUserData(perticularUser?.data);
@@ -51,7 +51,7 @@ const ProfilePage = () => {
             }
 
             const post = await axios.get(
-                `http://localhost:8080/post/${username}`,
+                `https://incendia-api.vercel.app/post/${username}`,
                 config
             );
             setUserPosts( [

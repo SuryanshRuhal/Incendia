@@ -30,7 +30,7 @@ const Stories=()=>{
                     Authorization: `Bearer ${userData?.data?.token}`
                 }
             }
-            const response= await axios.post(`http://localhost:8080/stories/create`,formData,config);
+            const response= await axios.post(`https://incendia-api.vercel.app/stories/create`,formData,config);
             setFile(null);
         } catch (error) {
             console.error(error);
@@ -45,7 +45,7 @@ try {
             Authorization: `Bearer ${userData?.data?.token}`,
         }
     }
-    const response=await axios.get(`http://localhost:8080/stories/fetchstorycreator`,config);
+    const response=await axios.get(`https://incendia-api.vercel.app/stories/fetchstorycreator`,config);
     
     setStoriesList(response?.data);
     

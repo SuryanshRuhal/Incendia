@@ -19,7 +19,7 @@ const ViewStory = () => {
                     Authorization: `Bearer ${userData?.data?.token}`
                 }
             }
-            const fetchedStory= await axios.get(`http://localhost:8080/stories/fetchstory/${id}`,config);
+            const fetchedStory= await axios.get(`https://incendia-api.vercel.app/stories/fetchstory/${id}`,config);
             
             setStory(fetchedStory?.data);
         } catch (error) {

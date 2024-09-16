@@ -18,7 +18,7 @@ const Suggestions=()=>{
                     Authorization: `Bearer ${userData?.data?.token}`
                 }
             }
-           const response= await axios.get(`http://localhost:8080/user/suggestions?limit=${limit}`,config);
+           const response= await axios.get(`https://incendia-api.vercel.app/user/suggestions?limit=${limit}`,config);
            setSuggestioncard(response?.data);
         } catch (error) {
             console.log(error);

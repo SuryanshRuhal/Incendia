@@ -30,7 +30,7 @@ const Post = (props) => {
                     Authorization: `Bearer ${userData?.data?.token}`,
                 }
             }
-            const response = await axios.get(`http://localhost:8080/post/liked/${props.id}`, config);
+            const response = await axios.get(`https://incendia-api.vercel.app/post/liked/${props.id}`, config);
             setUserLike(response?.data?.likedby);
         } catch (error) {
             console.log(error.message);
@@ -53,7 +53,7 @@ const Post = (props) => {
                     Authorization: `Bearer ${userData?.data?.token}`
                 }
             }
-            const response = await axios.get(`http://localhost:8080/comments/fetchFirstComments/${props.id}`, config);
+            const response = await axios.get(`https://incendia-api.vercel.app/comments/fetchFirstComments/${props.id}`, config);
             setFirstComment(response?.data);
            
         } catch (error) {
@@ -72,7 +72,7 @@ const Post = (props) => {
                 }
             }
             const payload = { comment: commentText };
-            await axios.post(`http://localhost:8080/comments/postId/${props.id}/parentComment/${parentCommentId || ''}`, payload, config);
+            await axios.post(`https://incendia-api.vercel.app/comments/postId/${props.id}/parentComment/${parentCommentId || ''}`, payload, config);
 
 
         } catch (error) {

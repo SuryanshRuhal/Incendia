@@ -15,7 +15,7 @@ const Followrequest=()=>{
                     Authorization:` Bearer ${userData?.data?.token}`
                 }
             }
-            const requests=await axios.get(`http://localhost:8080/user/fetchfollowrequests`,config); 
+            const requests=await axios.get(`https://incendia-api.vercel.app/user/fetchfollowrequests`,config); 
             setRequestList(requests.data.followrequests || []);
             
         } catch (error) {
@@ -31,7 +31,7 @@ const Followrequest=()=>{
                     Authorization: `Bearer ${userData?.data?.token}`
                 }
             }
-            await axios.get(`http://localhost:8080/user/acceptrequest/${userId}`,config);
+            await axios.get(`https://incendia-api.vercel.app/user/acceptrequest/${userId}`,config);
 
         } catch (error) {
             console.log(error.message);
@@ -49,7 +49,7 @@ const Followrequest=()=>{
                     Authorization: `Bearer ${userData?.data?.token}`
                 }
             }
-            await axios.get(`http://localhost:8080/user/rejectrequest/${userId}`,config);
+            await axios.get(`https://incendia-api.vercel.app/user/rejectrequest/${userId}`,config);
 
         } catch (error) {
             console.log(error.message);

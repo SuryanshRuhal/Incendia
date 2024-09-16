@@ -29,7 +29,7 @@ const Addpost=()=>{
                 }
             }
             const response= await axios.post(
-                `http://localhost:8080/post/create`,
+                `https://incendia-api.vercel.app/post/create`,
                 formData,
                 config
             )

@@ -24,7 +24,7 @@ const ProfileInfo = () => {
         },
       };
       const response = await axios.post(
-        `http://localhost:8080/user/profileupdate/${userData.data._id}`,
+        `https://incendia-api.vercel.app/user/profileupdate/${userData.data._id}`,
         formData,
         config
       );

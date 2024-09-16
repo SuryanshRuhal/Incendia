@@ -16,7 +16,7 @@ const ActivityPosts=()=>{
                 }
             }
 
-            const response= await axios.get(`http://localhost:8080/post/likedposts/${userData?.data?._id}`,config);
+            const response= await axios.get(`https://incendia-api.vercel.app/post/likedposts/${userData?.data?._id}`,config);
             setPosts(response?.data?.likedposts);
         } catch (error) {
             console.log(error.message);

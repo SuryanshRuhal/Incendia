@@ -21,7 +21,7 @@ const UserInfoCard = ({ userInfo }) => {
               Authorization: `Bearer ${userData?.data?.token}`,
             },
           };
-          const datares = await axios.get(`http://localhost:8080/user/checkfollowstatus/${userInfo?._id}`, config);
+          const datares = await axios.get(`https://incendia-api.vercel.app/user/checkfollowstatus/${userInfo?._id}`, config);
         
           setFollowStatus(datares?.data);
         } catch (error) {
@@ -46,7 +46,7 @@ const UserInfoCard = ({ userInfo }) => {
         },
       };
       
-      await axios.get(`http://localhost:8080/user/sendrequestto/${userInfo?._id}`, config);
+      await axios.get(`https://incendia-api.vercel.app/user/sendrequestto/${userInfo?._id}`, config);
      
       setRequestSent(!requestSent);
       
