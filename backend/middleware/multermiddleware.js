@@ -13,15 +13,20 @@ const storage = multer.diskStorage({
     }
   })
 
-  const upload = multer({ storage });
+  const fileFilter = (req, file, cb) => {
+    cb(null, true); 
+  };
+
+  const upload = multer({ storage, fileFilter });
 
   const compressImage = async (req, res, next) => {
     if (!req.file) return next(); 
     const filePath = req.file.path; 
-    const compressedFilePath = path.resolve('../uploads', `compressed-${Date.now()}.jpg`); // Correct path resolution
+    const compressedFilePath = path.resolve('../uploads', `compressed-${Date.now()}.jpg`); 
   
     try {
-    
+
+      if (req.file.mimetype.startsWith('image/')) {
       await sharp(filePath)
         .resize(800) 
         .jpeg({ quality: 70 }) 
@@ -37,7 +42,7 @@ const storage = multer.diskStorage({
       
       req.file.path = compressedFilePath;
       req.file.filename = path.basename(compressedFilePath);
-  
+    }
       next();
     } catch (error) {
       console.error("Error compressing image:", error);

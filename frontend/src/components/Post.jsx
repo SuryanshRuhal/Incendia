@@ -5,10 +5,20 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import MessageIcon from '@mui/icons-material/Message';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import AddCommentIcon from '@mui/icons-material/AddComment';
 import ShareIcon from '@mui/icons-material/Share';
 import { useState, useEffect } from "react";
 import SendIcon from '@mui/icons-material/Send';
+
+const getFileType = (url) => {
+    const extension = url.split('.').pop().toLowerCase(); 
+    const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'];
+    const videoExtensions = ['mp4', 'mov', 'avi', 'mkv', 'webm', 'ogg'];
+    if (imageExtensions.includes(extension)) {
+        return 'image';
+    } else if (videoExtensions.includes(extension)) {
+        return 'video';
+    }
+}
 
 
 const Post = (props) => {
@@ -82,6 +92,7 @@ const Post = (props) => {
             setLoading(false);
         }
     }
+    const fileType = getFileType(props?.postimg);
     return (
         <div className="flex-col p-4 sm:p-6 my-4 bg-white rounded-lg flex gap-2 shadow-md justify-between text-sm">
             {/* User */}
@@ -95,7 +106,15 @@ const Post = (props) => {
             {/* Description */}
             <div className="flex mt-1  flex-col gap-2 sm:gap-4">
                 <div className="w-full relative">
-                    <img src={props?.postimg} alt="" fill className="object-cover rounded-md" />
+                {fileType === 'image' && (
+                        <img src={props?.postimg} alt="Post media" className="object-cover rounded-md w-full" />
+                    )}
+                  {fileType === 'video' && (
+                        <video controls className="object-cover rounded-md w-full">
+                            <source src={props?.postimg} type="video/mp4" />
+                            Your browser does not support the video tag.
+                        </video>
+                    )} 
                 </div>
                 <p className={` ${props.size === 'sm' ? "text-xs " : props.size === 'md' ? "text-sm " : " text-base "} m-2`} >
                     <span className="font-bold ">{props?.postedby?.username}:  </span>
