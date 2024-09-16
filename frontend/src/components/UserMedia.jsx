@@ -1,3 +1,13 @@
+const getFileType = (url) => {
+    const extension = url.split('.').pop().toLowerCase(); 
+    const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'];
+    const videoExtensions = ['mp4', 'mov', 'avi', 'mkv', 'webm', 'ogg'];
+    if (imageExtensions.includes(extension)) {
+        return 'image';
+    } else if (videoExtensions.includes(extension)) {
+        return 'video';
+    }
+}
 
 const UserMedia=({postImages})=>{
     return(
@@ -9,8 +19,18 @@ const UserMedia=({postImages})=>{
             <div className="flex p-2 gap-4 justify- flex-wrap">
                { 
                postImages.map((postimg,index)=>{
-                return (<div className="relative w-1/2.7 " key={index}>
-                <img src={postimg} alt=""  className=" h-32 object-cover rounded-md "/>
+               const fileType = getFileType(postimg);
+                return (
+                <div className="relative w-1/2.7 " key={index}>
+                {fileType === 'image' && (
+                        <img src={postimg} alt="Post media" className="object-cover h-32 rounded-md" />
+                    )}
+                  {fileType === 'video' && (
+                        <video controls className="object-cover rounded-md h-32">
+                            <source src={postimg} type="video/mp4" />
+                            Your browser does not support the video tag.
+                        </video>
+                    )} 
                 </div>);
                })}
             </div>
