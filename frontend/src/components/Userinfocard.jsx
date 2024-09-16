@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import { Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 const UserInfoCard = ({ userInfo }) => {

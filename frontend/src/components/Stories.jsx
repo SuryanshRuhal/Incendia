@@ -30,7 +30,7 @@ const Stories=()=>{
                     Authorization: `Bearer ${userData?.data?.token}`
                 }
             }
-            const response= await axios.post(`https://incendia-api.vercel.app/stories/create`,formData,config);
+            await axios.post(`https://incendia-api.vercel.app/stories/create`,formData,config);
             setFile(null);
         } catch (error) {
             console.error(error);

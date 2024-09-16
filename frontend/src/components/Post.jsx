@@ -83,17 +83,17 @@ const Post = (props) => {
         }
     }
     return (
-        <div className="flex-col p-6 my-4 bg-white rounded-lg flex gap-4 shadow-md justify-between text-sm">
+        <div className="flex-col p-4 sm:p-6 my-4 bg-white rounded-lg flex gap-2 shadow-md justify-between text-sm">
             {/* User */}
             <div className="flex items-center justify-between">
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2 sm:gap-4">
                     <img src={props?.postedby?.avatar} alt="" className="w-10 h-10 rounded-full" />
                     <span className="font-medium">{props?.postedby?.username}</span>
                 </div>
                 <MoreHorizIcon className="cursor-pointer" />
             </div>
             {/* Description */}
-            <div className="flex mt-4 flex-col gap-4">
+            <div className="flex mt-1  flex-col gap-2 sm:gap-4">
                 <div className="w-full relative">
                     <img src={props?.postimg} alt="" fill className="object-cover rounded-md" />
                 </div>
@@ -103,7 +103,7 @@ const Post = (props) => {
                 </p>
             </div>
             {/* Interaction*/}
-            <div className={` ${props.size === 'lg' ? " " : " !flex-col !my-2 "} my-2 flex-col sm:flex-row flex items-center justify-between sm:my-4 text-sm `}>
+            <div className={` ${props.size === 'lg' ? " " : " !flex-col !my-2 "} my-1 flex-col sm:flex-row flex items-center justify-between sm:my-4 text-sm `}>
                 <div className={`flex gap-6`}>
                     <div className={` ${props.size === 'sm' ? "gap-2 " : "sm:gap-4 "} gap-2 flex items-center bg-slate-100 p-2 rounded-xl`}>
                         {

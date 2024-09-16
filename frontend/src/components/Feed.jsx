@@ -9,7 +9,7 @@ const userData = JSON.parse(localStorage.getItem("userData"));
 const[posts, setPosts]= useState([]);
 const [loading,setLoading]= useState(false);
 const skipRef= useRef(0);
-const limit=3;
+const limit=2;
 
 const fetchfeed= async()=>{
     if(loading){return;}

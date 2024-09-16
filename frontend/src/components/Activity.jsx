@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Post from "./Post";
+import Birthdays from "./Birthdays";
+import Suggestions from "./suggestions";
+import Followrequest from "./Followrequest";
 import Leftmenu from "./leftmenu";
 import Rightmenu from "./rightmenu";
 
@@ -34,6 +37,11 @@ const ActivityPosts=()=>{
         </div>
         <div className="w-full lg:w-[70%] xl:w-[50%] ">
            <div className="mx-4 my-2 sm:m-0 flex flex-col pt-6">
+           <div className="lg:hidden my-4 gap-4 mx-0  flex flex-col pt-6">
+           <Followrequest/>
+            <Birthdays/>
+            <Suggestions/>
+             </div>
            {posts.map((postitem,i)=>{
              return <Post key={postitem._id} id={postitem._id} postedby={postitem.postedby} size="lg"
              likedby={postitem.likedby} postimg={postitem.postimg} caption={postitem.caption} 

@@ -1,6 +1,5 @@
 import SendIcon from '@mui/icons-material/Send';
 import MessageIcon from '@mui/icons-material/Message';
-import { Backdrop, CircularProgress } from "@mui/material";
 import axios from 'axios';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';

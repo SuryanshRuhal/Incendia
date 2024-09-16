@@ -106,6 +106,9 @@ const ProfilePage = () => {
                     <Outlet/>
                     {/* {<FollowerUser/>} */}
                     {/* {<FollowingUser/>} */}
+                    <div className="sm:hidden my-2 sm:m-0 mx-0 flex flex-col pt-6">
+                    <UserInfoCard userInfo={oneUserData} />
+                    </div>
                     {
                             loading?
                             <Backdrop
