@@ -12,12 +12,7 @@ const storage = multer.diskStorage({
       cb(null,`image-${Date.now()}.${file.originalname}`);
     }
   })
-
-  const fileFilter = (req, file, cb) => {
-    cb(null, true); 
-  };
-
-  const upload = multer({ storage, fileFilter });
+  const upload = multer({ storage });
 
   const compressImage = async (req, res, next) => {
     if (!req.file) return next(); 
