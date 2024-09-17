@@ -28,7 +28,7 @@ const Addpost=()=>{
                      Authorization :`Bearer ${userData?.data?.token}`,
                 }
             }
-            const response= await axios.post(
+            await axios.post(
                 `https://incendia-api.vercel.app/post/create`,
                 formData,
                 config

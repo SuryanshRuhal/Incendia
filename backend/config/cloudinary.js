@@ -1,4 +1,5 @@
 const cloudinary = require('cloudinary').v2;
+const { rejects } = require('assert');
 const fs = require('fs');
 
 cloudinary.config({ 
@@ -9,16 +10,26 @@ cloudinary.config({
 
 const uploadOnCloudinary= async (fileBuffer, resourceType='auto')=>{
     try {
-
-        if(!fileBuffer) return null;
-         const response= await cloudinary.uploader.upload_stream({
-            resource_type: resourceType,
-        }).end(fileBuffer);
-
+        if (!fileBuffer) return null;
+    
+        const response = await new Promise((resolve, reject) => {
+          const uploadStream = cloudinary.uploader.upload_stream(
+            { resource_type: resourceType },
+            (error, result) => {
+              if (error) {
+                return reject(error); 
+              }
+              resolve(result); 
+            }
+          );
+          uploadStream.end(fileBuffer);
+        });
+        
         return response; 
-    } catch (error) {
+      } catch (error) {
         console.error("Cloudinary upload error:", error);
         return null;
-    }
-}
+      }
+    };
+
 module.exports = {uploadOnCloudinary};

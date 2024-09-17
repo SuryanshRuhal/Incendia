@@ -6,25 +6,25 @@ const User = require("../modals/UserModel");
 
 const postcreatecontroller = expressAsyncHandler(async (req, res) => {
     const caption = req.body.caption;
-
     let fileBuffer = req.file?.buffer; 
     let postUrl = "";
-
     if (fileBuffer) {
         let resourceType;
-
         if (req.file.mimetype.startsWith('image/')) {
             resourceType = 'image';
         } else if (req.file.mimetype.startsWith('video/')) {
             resourceType = 'video';
         } else if (req.file.mimetype.startsWith('audio/')) {
-            resourceType = 'raw'; 
+            resourceType = 'raw';
         } else {
             throw new Error("File not Supported");
         }
-
         const uploadpost = await uploadOnCloudinary(fileBuffer, resourceType);
-        postUrl = uploadpost?.url;
+        if (uploadpost) {
+            postUrl = uploadpost.url || uploadpost.secure_url;
+        } else {
+            throw new Error("Failed to upload file to Cloudinary.");
+        }
     }
 
     if (!req.user || !req.user._id) {
@@ -45,7 +45,6 @@ const postcreatecontroller = expressAsyncHandler(async (req, res) => {
         await User.findByIdAndUpdate(req.user._id, {
             $push: { posts: Post._id }
         });
-
         res.status(201).json(Post);
     } catch (error) {
         res.status(401);
