@@ -19,8 +19,7 @@ const Mobilemenu = () => {
                 <div className={`w-6 h-1 bg-purple-900 rounded-sm ${isopen ? "-rotate-45" : ""} 
         origin-left ease-in-out duration-500`}></div>
             </div>
-            {isopen && (<div className="absolute left-0 top-20 w-full flex h-calc[(100vh-96px)] bg-white  items-center justify-evenly my-2 gap-3 font-medium text-xl z-10">
-
+            {isopen && (<div className="absolute left-0 top-20 w-full flex h-calc[(100vh-96px)] bg-rose-50  items-center justify-evenly my-2 gap-3 font-medium text-xl z-10 rounded-md shadow-lg">
 
                 <Link to="/home">
                     <div className="flex items-center m-3 gap-2">

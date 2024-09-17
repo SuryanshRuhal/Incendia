@@ -4,6 +4,18 @@ import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import { Backdrop, CircularProgress, } from "@mui/material";
+
+const getFileType = (url) => {
+    const extension = url.split('.').pop().toLowerCase(); 
+    const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'];
+    const videoExtensions = ['mp4', 'mov', 'avi', 'mkv', 'webm', 'ogg'];
+    if (imageExtensions.includes(extension)) {
+        return 'image';
+    } else if (videoExtensions.includes(extension)) {
+        return 'video';
+    }
+}
+
 const ViewStory = () => {
     const userData = JSON.parse(localStorage.getItem("userData"));
     const {id}= useParams();
@@ -31,6 +43,9 @@ const ViewStory = () => {
     useEffect(()=>{
         fetchUserStory();
     },[])
+
+    
+    const fileType = getFileType(story?.stories[0]?.story);
     return (
         <div className="flex justify-center items-center  h-[calc(100vh-64px)]">
            {
@@ -49,7 +64,15 @@ const ViewStory = () => {
                 <CloseIcon className="absolute right-4 top-3 cursor-pointer" onClick={() => navigate(-1)} />
             </div>
             <div className="flex-1 flex items-center justify-center  h-[calc(100vh-64px)] max-h-[calc(100vh-64px)]">
-                <img src={story?.stories[0]?.story} alt="" className="object-cover w-full h-full" />
+                {fileType === 'image' && (
+                        <img src={story?.stories[0]?.story} alt="Post media" className="object-cover hfull w-full" />
+                    )}
+                  {fileType === 'video' && (
+                        <video controls className="object-cover h-full w-full">
+                            <source src={story?.stories[0]?.story} type="video/mp4" />
+                            Your browser does not support the video tag.
+                        </video>
+                    )} 
             </div>
         </div>
            }
