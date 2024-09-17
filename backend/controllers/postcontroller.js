@@ -2,23 +2,29 @@ const expressAsyncHandler = require("express-async-handler");
 const { uploadOnCloudinary } = require("../config/cloudinary");
 const post = require("../modals/postmodel");
 const User = require("../modals/UserModel");
-const cloudinary = require('cloudinary').v2;
 
 
 const postcreatecontroller = expressAsyncHandler(async (req, res) => {
     const caption = req.body.caption;
 
-    const postImgPath = req.file.path;
-
+    let fileBuffer = req.file?.buffer; 
     let postUrl = "";
 
-    if (postImgPath) {
-        if (req.file.mimetype.startsWith('image/') || req.file.mimetype.startsWith('video/')) {
-            const uploadpost = await uploadOnCloudinary(postImgPath);
-            postUrl = uploadpost.url;
+    if (fileBuffer) {
+        let resourceType;
+
+        if (req.file.mimetype.startsWith('image/')) {
+            resourceType = 'image';
+        } else if (req.file.mimetype.startsWith('video/')) {
+            resourceType = 'video';
+        } else if (req.file.mimetype.startsWith('audio/')) {
+            resourceType = 'raw'; 
         } else {
-           throw new Error("File not Supported");
+            throw new Error("File not Supported");
         }
+
+        const uploadpost = await uploadOnCloudinary(fileBuffer, resourceType);
+        postUrl = uploadpost?.url;
     }
 
     if (!req.user || !req.user._id) {
