@@ -34,20 +34,20 @@ const createStoryController = expressAsyncHandler(async (req, res) => {
 
 const fetchStoryFollowersController = expressAsyncHandler(async (req, res) => {
     try {
-        const user = await User.findById(req.user._id).select("followers").populate({
-            path: "followers",
+        const user = await User.findById(req.user._id).select("following").populate({
+            path: "following",
             select: "_id username avatar stories",
             populate: {
                 path: "stories",
                 select: "createdAt"
             }
         });
-        const storyFollower = user.followers.filter(follower => {
-            return follower.stories.some(story => {
+        const storyFollowing = user.following.filter(followings => {
+            return followings.stories.some(story => {
                 return new Date(story.createdAt) >= new Date(Date.now() - 24 * 60 * 60 * 1000);
             });
         });
-        res.status(200).json(storyFollower);
+        res.status(200).json(storyFollowing);
     } catch (error) {
         res.status(500)
         throw new Error("fetch stories failed");
@@ -55,7 +55,6 @@ const fetchStoryFollowersController = expressAsyncHandler(async (req, res) => {
 });
 
 const fetchStoriesController = expressAsyncHandler(async (req, res) => {
-    ;
     try {
         
         const user = await User.findById(req.params.userId).populate({
