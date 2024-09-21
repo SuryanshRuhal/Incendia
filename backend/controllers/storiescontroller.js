@@ -10,7 +10,7 @@ const createStoryController = expressAsyncHandler(async (req, res) => {
     }
 
     if (!storyurl) {
-        throw new Error("Write a caption");
+        throw new Error("No story found");
     }
 
     const newStory = {

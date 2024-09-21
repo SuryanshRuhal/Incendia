@@ -41,7 +41,7 @@ const Stories=()=>{
             console.log("Uploaded File URL:", cloudinaryUrl);
     
             const Storyload = {
-                storyimg: cloudinaryUrl,
+                storyurl: cloudinaryUrl,
             };
     
             const config = {
