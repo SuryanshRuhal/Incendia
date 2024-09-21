@@ -2,11 +2,14 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import AddIcon from '@mui/icons-material/Add';
 import {useState, useRef, useEffect} from "react";
+import { Backdrop, CircularProgress } from "@mui/material";
+
 const Stories=()=>{
     const userData= JSON.parse(localStorage.getItem("userData"));
     const [storiesList, setStoriesList]=useState([]);
     const [file, setFile]=useState(null);
     const fileInputRef = useRef(null);
+    const [loading, setLoading] = useState(false);
     const handleAddIconClick = () => {
         fileInputRef.current.click(); 
     };
@@ -18,22 +21,45 @@ const Stories=()=>{
     };
 
     const createStoryHandler=async(file)=>{
-        if (!file) return;
+        if (!file) {
+            alert("Please select a file to upload.");
+            return;
+        }
+    
+        setLoading(true);
         try {
+            const resourceType = file.type.startsWith("video/") ? "video" : "image";
+            const uploadPreset = file.type.startsWith("video/") ? "Incendia-video" : "Incendia-image";
+            const formData = new FormData();
+            formData.append("file", file);
+            formData.append("upload_preset", uploadPreset); 
+            formData.append("resource_type", resourceType); 
+
+            const uploadResponse = await axios.post(`https://api.cloudinary.com/v1_1/dp6skj1a4/${resourceType}/upload`, formData);
             
-            const formData= new FormData();
-            formData.append("story", file);
-            
-            const config={
-                headers:{
-                    "Content-Type":"multipart/form-data",
-                    Authorization: `Bearer ${userData?.data?.token}`
+            const cloudinaryUrl = uploadResponse.data.secure_url;
+            console.log("Uploaded File URL:", cloudinaryUrl);
+    
+            const Storyload = {
+                storyimg: cloudinaryUrl,
+            };
+    
+            const config = {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${userData?.data?.token}`,
                 }
-            }
-            await axios.post(`https://incendia-api.vercel.app/stories/create`,formData,config);
+            };
+            await axios.post(`https://incendia-api.vercel.app/stories/create`,Storyload,config);
+           
+            fileInputRef.current.value = null;
             setFile(null);
+            alert("Story uploaded successfully!");
         } catch (error) {
             console.error(error);
+            alert("Failed to upload the Story. Please try again.");
+        } finally {
+            setLoading(false);
         }
 
     }
@@ -58,6 +84,13 @@ useEffect(()=>{
 },[]);
 
     return(
+        <>
+        <Backdrop
+                sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                open={loading}
+            >
+                <CircularProgress color="secondary" />
+            </Backdrop>
         <div className="p-4 bg-white rounded-lg shadow-md overflow-scroll text-xs scrollbar-hide">
             <div className="flex gap-8 w-max">
                 <div className=" flex flex-col items-center gap-2 cursor-pointer relative">
@@ -78,6 +111,7 @@ useEffect(()=>{
                 })}
             </div>
         </div>
+        </>
     );
 }
 export default Stories;

@@ -1,7 +1,6 @@
 const expressAsyncHandler =require("express-async-handler");
 const generatetoken= require("../config/generatetoken");
 const userModel = require("../modals/UserModel");
-const {uploadOnCloudinary}  =require("../config/cloudinary");
 const { omitUndefined } = require("mongoose");
 
 const registercontroller= expressAsyncHandler(async (req, res)=>{
@@ -71,10 +70,8 @@ const logincontroller= expressAsyncHandler(async (req, res)=>{
 });
 const userInfocontroller = expressAsyncHandler(async (req, res) => {
     const update = req.body;
-    const avatarLocalPath = req.file ? req.file.path : null;
-    if (avatarLocalPath) {
-        const uploadResult = await uploadOnCloudinary(avatarLocalPath);
-        update.avatar= uploadResult.url;
+    if (update.avatar) {
+        update.avatar = update.avatar;
     }
 
     const user = await userModel.findByIdAndUpdate(

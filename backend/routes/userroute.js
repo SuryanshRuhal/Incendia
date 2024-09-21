@@ -1,7 +1,5 @@
 const express= require("express");
 const {registercontroller, logincontroller, userInfocontroller, fetchperticularUsercontroller, fetchSuggestionsController, fetchFollowerController, fetchFollowingController} = require("../controllers/usercontroller");
-
-const {upload, compressMedia}=require("../middleware/multermiddleware");
 const {protect} = require("../middleware/authorizationmiddleware");
 const { todayBirthdaycontroller, upcomingBirthdayController } = require("../controllers/birthdays");
 const { sendRequestController, fetchRequestsController, acceptRequestController, cancelRequestController, checkFollowStatus } = require("../controllers/followrequest");
@@ -10,7 +8,7 @@ const router= express.Router();
 
 router.post("/register",registercontroller );
 router.post("/signin", logincontroller);
-router.post("/profileupdate/:userId", protect, upload.single("avatar"),compressMedia, userInfocontroller);
+router.post("/profileupdate/:userId", userInfocontroller);
 router.get("/find/:username",protect,fetchperticularUsercontroller);
 router.get("/suggestions",protect, fetchSuggestionsController);
 router.get("/todaybirthday",protect,todayBirthdaycontroller);

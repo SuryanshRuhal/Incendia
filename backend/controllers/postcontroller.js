@@ -1,31 +1,10 @@
 const expressAsyncHandler = require("express-async-handler");
-const { uploadOnCloudinary } = require("../config/cloudinary");
 const post = require("../modals/postmodel");
 const User = require("../modals/UserModel");
 
 
 const postcreatecontroller = expressAsyncHandler(async (req, res) => {
-    const caption = req.body.caption;
-    let fileBuffer = req.file?.buffer; 
-    let postUrl = "";
-    if (fileBuffer) {
-        let resourceType;
-        if (req.file.mimetype.startsWith('image/')) {
-            resourceType = 'image';
-        } else if (req.file.mimetype.startsWith('video/')) {
-            resourceType = 'video';
-        } else if (req.file.mimetype.startsWith('audio/')) {
-            resourceType = 'raw';
-        } else {
-            throw new Error("File not Supported");
-        }
-        const uploadpost = await uploadOnCloudinary(fileBuffer, resourceType);
-        if (uploadpost) {
-            postUrl = uploadpost.url || uploadpost.secure_url;
-        } else {
-            throw new Error("Failed to upload file to Cloudinary.");
-        }
-    }
+    const { caption, postimg } = req.body; 
 
     if (!req.user || !req.user._id) {
         return res.status(401).send("User not authenticated.");
@@ -34,9 +13,10 @@ const postcreatecontroller = expressAsyncHandler(async (req, res) => {
     if (!caption) {
         throw new Error("Write a caption");
     }
+
     const newPost = {
         postedby: req.user._id,
-        postimg: postUrl,
+        postimg: postimg,
         caption: caption,
     };
 

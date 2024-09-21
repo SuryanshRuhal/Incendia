@@ -15,28 +15,50 @@ const ProfileInfo = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const formData = new FormData(e.target); 
-      
+      let avatarUrl = null;
+
+      if (file) {
+        const resourceType = file.type.startsWith("video/") ? "video" : "image";
+        const uploadPreset = file.type.startsWith("video/") ? "Incendia-video" : "Incendia-image";
+        const uploadData = new FormData();
+        uploadData.append("file", file);
+        uploadData.append("upload_preset", uploadPreset);
+        uploadData.append("resource_type", resourceType);
+
+        const uploadResponse = await axios.post(`https://api.cloudinary.com/v1_1/dp6skj1a4/${resourceType}/upload`, uploadData);
+        avatarUrl = uploadResponse.data.secure_url;
+      }
+
+      const profileUpdatePayload = {
+        living: e.target.living.value,
+        bio: e.target.bio.value,
+        birthday: e.target.birthday.value,
+        ...(avatarUrl && { avatar: avatarUrl }),
+      };
+
       const config = {
         headers: {
-          "Content-Type": "multipart/form-data",
+          "Content-Type": "application/json",
           Authorization: `Bearer ${userData.data.token}`,
         },
       };
+
       const response = await axios.post(
         `https://incendia-api.vercel.app/user/profileupdate/${userData.data._id}`,
-        formData,
+        profileUpdatePayload,
         config
       );
-      localStorage.setItem("userData", JSON.stringify(response));
-     
+
+      localStorage.setItem("userData", JSON.stringify(response.data));
       navigate("/home");
     } catch (error) {
       console.error(error);
+      alert("Failed to upload the Story. Please try again.");
     } finally {
       setLoading(false);
     }
   };
+
 
   return (
     <>
