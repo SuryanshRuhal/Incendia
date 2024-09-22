@@ -6,7 +6,7 @@ import MessageIcon from '@mui/icons-material/Message';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ShareIcon from '@mui/icons-material/Share';
-import { useState, useEffect } from "react";
+import { useState, useEffect,useRef } from "react";
 import SendIcon from '@mui/icons-material/Send';
 
 const getFileType = (url) => {
@@ -30,6 +30,8 @@ const Post = (props) => {
     const [loading, setLoading] = useState(false);
 
     const userData = JSON.parse(localStorage.getItem("userData"));
+    const videoRef = useRef(null);
+    const fileType = getFileType(props?.postimg);
     const likeHandler = async () => {
         const previousState = isliked;
         setlike(!isliked);
@@ -92,7 +94,39 @@ const Post = (props) => {
             setLoading(false);
         }
     }
-    const fileType = getFileType(props?.postimg);
+   
+    useEffect(() => {
+        if (fileType !== 'video') return;
+        const videoElement = videoRef.current;
+        if (!videoElement) return;
+
+        const handleIntersection = (entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    if (!videoElement.paused) {
+                        videoElement.pause();
+                    }
+                    videoElement.play().catch(error => {
+                        console.log("Auto-play was prevented:", error);
+                    });
+                } else {
+                    if (!videoElement.paused) {
+                    videoElement.pause();
+                    }
+                }
+            });
+        };
+
+        const observer = new IntersectionObserver(handleIntersection, {
+            threshold: 0.5,
+        });
+
+        observer.observe(videoElement);
+        return () => {
+            observer.unobserve(videoElement);
+        };
+    }, [fileType]);
+
     return (
         <div className="flex-col p-4 sm:p-6 my-4 bg-white rounded-lg flex gap-2 shadow-md justify-between text-sm">
             {/* User */}
@@ -110,10 +144,11 @@ const Post = (props) => {
                         <img src={props?.postimg} alt="Post media" className="object-cover rounded-md w-full" />
                     )}
                   {fileType === 'video' && (
-                        <video controls className="object-cover rounded-md w-full">
+                        <video  ref={videoRef} muted playsInline controls className="object-cover rounded-md w-full">
                             <source src={props?.postimg} type="video/mp4" />
                             Your browser does not support the video tag.
                         </video>
+                        
                     )} 
                 </div>
                 <p className={` ${props.size === 'sm' ? "text-xs " : props.size === 'md' ? "text-sm " : " text-base "} m-2`} >

@@ -1,5 +1,5 @@
 import { useState,useEffect } from "react";
-import { Backdrop, CircularProgress, } from "@mui/material";
+import { Backdrop, CircularProgress, debounce, } from "@mui/material";
 import Advertisement from "./advertisements";
 import dummyAdData from "./addata";
 const Advertisementlist=({limit})=>{
@@ -19,14 +19,14 @@ useEffect(() => {
     fetchRandomAds();
   }, []);
 
-  const hadleScroll=()=>{
+  const hadleScroll=debounce(()=>{
     if(window.innerHeight+ document.documentElement.scrollTop+1>=document.documentElement.scrollHeight){
         
         setTimeout(() => {
             fetchRandomAds(); 
         }, 500);
     }
-};
+},200);
 useEffect(()=>{
     window.addEventListener('scroll',hadleScroll);
     return()=>{

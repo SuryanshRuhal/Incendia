@@ -1,13 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import Post from "./Post";
 import axios from "axios";
-import { Backdrop, CircularProgress, } from "@mui/material";
+import { Backdrop, CircularProgress, debounce, } from "@mui/material";
 
 const Feed=({size})=>{
     
 const userData = JSON.parse(localStorage.getItem("userData"));
 const[posts, setPosts]= useState([]);
 const [loading,setLoading]= useState(false);
+const uniqueIdRef = useRef(0);
 const skipRef= useRef(0);
 const limit=2;
 
@@ -18,7 +19,7 @@ const fetchfeed= async()=>{
     
     const config={
         headers:{
-            "Content-Type": "applcation/json",
+            "Content-Type": "application/json",
             Authorization: `Bearer ${userData.data.token}`,
         }
     }
@@ -28,7 +29,7 @@ const fetchfeed= async()=>{
        skipRef.current=0;
         return;
     }
-
+    uniqueIdRef.current += 1;
     setPosts(
         (prevPosts)=>[
             ...prevPosts,
@@ -48,11 +49,11 @@ useEffect(()=>{
     fetchfeed();
 },[]);
 
-const hadleScroll=()=>{
+const hadleScroll=debounce(()=>{
     if(window.innerHeight+ document.documentElement.scrollTop+1>=document.documentElement.scrollHeight){
         fetchfeed();
     }
-};
+},200);
 useEffect(()=>{
     window.addEventListener('scroll',hadleScroll);
     return()=>{
@@ -71,7 +72,9 @@ useEffect(()=>{
             </Backdrop>
             :
             posts.map((postitem,index)=>{
-                return <Post key={index} id={postitem._id} postedby={postitem.postedby} size={size}
+                const uniqueKey = `${postitem._id}-${uniqueIdRef.current}-${index}`;
+                console.log('Unique Key:', uniqueKey);
+                return <Post  key={`${postitem._id}-${uniqueIdRef.current}-${index}`} id={postitem._id} postedby={postitem.postedby} size={size}
                 likedby={postitem.likedby} postimg={postitem.postimg} caption={postitem.caption} 
                 createdAt={postitem.createdAt} updatedAt={postitem.updatedAt} commentno={postitem?.comments?.length} />
             })
