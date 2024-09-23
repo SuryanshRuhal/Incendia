@@ -87,7 +87,7 @@ const Addpost = () => {
                                 ref={fileInputRef}
                                 className="w-[90%] mb-2 rounded-lg p-2 text-purple-950 bg-[#70798121] border-b-2 shadow-2xl border-purple-800"
                             />
-                            <input
+                            <textarea
                                 type="text"
                                 name="caption"
                                 value={caption}
