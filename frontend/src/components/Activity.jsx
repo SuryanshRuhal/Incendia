@@ -42,7 +42,8 @@ const ActivityPosts = () => {
                         <Birthdays />
                         <Suggestions />
                     </div>
-                    {posts.map((postitem, i) => {
+                    {(posts.length === 0) ? <div className="p-2 bg-white rounded-lg gap-4 shadow-md h-screen text-sm"><div className='m-2 text-center italic'> You haven't liked any Posts yet.🥺</div> </div>:
+                    posts.map((postitem, i) => {
                         return <Post key={postitem._id} id={postitem._id} postedby={postitem.postedby} size="lg"
                             likedby={postitem.likedby} postimg={postitem.postimg} caption={postitem.caption}
                             createdAt={postitem.createdAt} updatedAt={postitem.updatedAt} commentno={postitem?.comments?.length} />
