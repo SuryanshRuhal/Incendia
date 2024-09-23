@@ -1,4 +1,5 @@
 import Comment from "./comments";
+import React from "react";
 import { Backdrop, CircularProgress } from "@mui/material";
 import axios from "axios";
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
@@ -217,4 +218,4 @@ const Post = (props) => {
     )
 }
 
-export default Post;
+export default React.memo(Post);

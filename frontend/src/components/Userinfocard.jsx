@@ -6,23 +6,23 @@ import axios from 'axios';
 
 const UserInfoCard = ({ userInfo }) => {
   const [followStatus, setFollowStatus] = useState({ isFollowing: false, isFollowedBack: false });
-  const [requestSent,setRequestSent] = useState(false);
+  const [requestSent, setRequestSent] = useState(false);
   const userData = JSON.parse(localStorage.getItem('userData'));
 
   useEffect(() => {
-    
+
     if (userData?.data?.token) {
       const checkFollowStatus = async () => {
-        
+
         try {
           const config = {
             headers: {
-              "Content-Type":"application/json",
+              "Content-Type": "application/json",
               Authorization: `Bearer ${userData?.data?.token}`,
             },
           };
           const datares = await axios.get(`https://incendia-api.vercel.app/user/checkfollowstatus/${userInfo?._id}`, config);
-        
+
           setFollowStatus(datares?.data);
         } catch (error) {
           console.error('Error fetching follow status', error);
@@ -45,11 +45,11 @@ const UserInfoCard = ({ userInfo }) => {
           Authorization: `Bearer ${userData?.data?.token}`,
         },
       };
-      
+
       await axios.get(`https://incendia-api.vercel.app/user/sendrequestto/${userInfo?._id}`, config);
-     
+
       setRequestSent(!requestSent);
-      
+
     } catch (error) {
       setRequestSent(!requestSent);
       console.log(error);
@@ -94,17 +94,17 @@ const UserInfoCard = ({ userInfo }) => {
             Edit
           </button>
         </Link>
-      ) :  followStatus.isFollowedBack  ? (
+      ) : followStatus.isFollowedBack ? (
         <button className="bg-rose-100 w-full mb-2 border-purple-950 py-1 px-2 justify-center shadow-md rounded-md text-s cursor-pointer">
           Following
         </button>
       ) : followStatus.isFollowing ? (
-        <button className={`${requestSent? "bg-sky-200" :"bg-purple-200"} w-full mb-2 border-purple-950 py-1 px-2 justify-center shadow-md rounded-md text-s cursor-pointer`}  onClick={sendRequestHandler} disabled={requestSent} >
-          {requestSent?"Request is Sent":"Follow Back"}
+        <button className={`${requestSent ? "bg-sky-200" : "bg-purple-200"} w-full mb-2 border-purple-950 py-1 px-2 justify-center shadow-md rounded-md text-s cursor-pointer`} onClick={sendRequestHandler} disabled={requestSent} >
+          {requestSent ? "Request is Sent" : "Follow Back"}
         </button>
       ) : (
-        <button className={`${requestSent? "bg-sky-200" :"bg-purple-200"} w-full mb-2 border-purple-950 py-1 px-2 justify-center shadow-md rounded-md text-s cursor-pointer`} onClick={sendRequestHandler} disabled={requestSent}>
-         {requestSent?"Request is Sent":"Follow"} 
+        <button className={`${requestSent ? "bg-sky-200" : "bg-purple-200"} w-full mb-2 border-purple-950 py-1 px-2 justify-center shadow-md rounded-md text-s cursor-pointer`} onClick={sendRequestHandler} disabled={requestSent}>
+          {requestSent ? "Request is Sent" : "Follow"}
         </button>
       )}
     </div>

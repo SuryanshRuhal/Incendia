@@ -11,7 +11,7 @@ const Addpost = () => {
     const userData = JSON.parse(localStorage.getItem("userData"));
     const [caption, setCaption] = useState("");
     const [file, setFile] = useState(null);
-    const fileInputRef = useRef(null); 
+    const fileInputRef = useRef(null);
     const [loading, setLoading] = useState(false);
 
     const handleFileChange = (e) => setFile(e.target.files[0]);
@@ -22,27 +22,26 @@ const Addpost = () => {
             alert("Please select a file to upload.");
             return;
         }
-    
+
         setLoading(true);
         try {
-           
-            const resourceType= file.type.startsWith("video/") ? "video" : "image";
+
+            const resourceType = file.type.startsWith("video/") ? "video" : "image";
             const uploadPreset = file.type.startsWith("video/") ? "Incendia-video" : "Incendia-image";
             const formData = new FormData();
             formData.append("file", file);
-            formData.append("upload_preset", uploadPreset); 
-            formData.append("resource_type", resourceType); 
+            formData.append("upload_preset", uploadPreset);
+            formData.append("resource_type", resourceType);
 
             const uploadResponse = await axios.post(`https://api.cloudinary.com/v1_1/dp6skj1a4/${resourceType}/upload`, formData);
-            
+
             const cloudinaryUrl = uploadResponse.data.secure_url;
-            console.log("Uploaded File URL:", cloudinaryUrl);
-    
+
             const postPayload = {
                 caption: caption,
                 postimg: cloudinaryUrl,
             };
-    
+
             const config = {
                 headers: {
                     "Content-Type": "application/json",
@@ -51,7 +50,7 @@ const Addpost = () => {
             };
 
             await axios.post(`https://incendia-api.vercel.app/post/create`, postPayload, config);
-    
+
             fileInputRef.current.value = null;
             setCaption("");
             setFile(null);
@@ -83,7 +82,7 @@ const Addpost = () => {
                         <div className="">
                             <input
                                 type="file"
-                                accept="image/*, video/*" 
+                                accept="image/*, video/*"
                                 onChange={handleFileChange}
                                 ref={fileInputRef}
                                 className="w-[90%] mb-2 rounded-lg p-2 text-purple-950 bg-[#70798121] border-b-2 shadow-2xl border-purple-800"
@@ -95,7 +94,7 @@ const Addpost = () => {
                                 onChange={(e) => setCaption(e.target.value)}
                                 placeholder="What's on your mind?"
                                 className="bg-slate-100 w-[90%] mb-2 rounded-lg outline-none flex-1 p-2"
-                                 />
+                            />
                         </div>
                         <div className="items-center">
                             <CloudUploadIcon className="!h-14 !w-14 cursor-pointer self-center" onClick={handlePostCreate} />

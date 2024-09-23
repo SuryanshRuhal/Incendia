@@ -50,14 +50,14 @@ const ViewStory = () => {
 
 
     return (
-        <div className="flex justify-center items-center h-[calc(100vh-64px)]">
-            {
-                loading ?
-                    <Backdrop
-                        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-                        open={loading}>
-                        <CircularProgress color="secondary" />
-                    </Backdrop> :
+        <>
+            <Backdrop
+                sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                open={loading}>
+                <CircularProgress color="secondary" />
+            </Backdrop>
+            <div className="flex justify-center items-center h-[calc(100vh-64px)]">
+                {
                     <div className="w-fit flex-col bg-black rounded-lg flex shadow-md h-full relative ">
                         <div className="flex mx-4 my-2 items-center justify-between text-white absolute top-0 left-0 right-0">
                             <div className="flex items-center gap-4">
@@ -78,8 +78,9 @@ const ViewStory = () => {
                             )}
                         </div>
                     </div>
-            }
-        </div>
+                }
+            </div>
+        </>
     );
 }
 export default ViewStory;
