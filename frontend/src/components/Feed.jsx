@@ -11,7 +11,7 @@ const Feed = ({ size }) => {
     const [loading, setLoading] = useState(false);
     const isFetchingRef = useRef(false);
     const skipRef = useRef(0);
-    const limit = 3;
+    const limit = 4;
 
     const fetchfeed = async () => {
         if (loading || isFetchingRef.current) { return; }
