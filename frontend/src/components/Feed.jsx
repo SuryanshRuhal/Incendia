@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import Post from "./Post";
 import axios from "axios";
 import { Backdrop, CircularProgress, } from "@mui/material";
-import debounce from "lodash/debounce";
 import { v4 as uuidv4 } from "uuid";
 
 const Feed = ({ size }) => {
