@@ -256,7 +256,7 @@ const dummyAdData = [
           company_name: "Manyawar",
           profile_pic: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcScLRs1aPWFEkTiHkuOgMXVNGWXGoMEhQr03w&s",
           product_description: "Geranium Pink Bel Buti Patterned Bridal Lehenga",
-          website_url: "https://www.manyavar.com/en-in/lehenga/geranium-pink-bel-buti-patterned-bridal-lehenga/UC115310.html",
+          website_url: "https://manyavar.scene7.com/is/image/manyavar/ULB4731_414-PINK.5031_23-09-2023-17-21:650x900",
           product_img: "https://manyavar.scene7.com/is/image/manyavar/ULB4495-415_K_29-08-2023-13-22:650x900",
         },
       
