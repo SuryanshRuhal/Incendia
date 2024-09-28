@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Backdrop, CircularProgress, debounce, } from "@mui/material";
 import Advertisement from "./advertisements";
 import dummyAdData from "./addata";
@@ -6,15 +6,15 @@ const Advertisementlist = ({ limit }) => {
 
     const [ads, setAds] = useState([]);
     const [loading, setLoading] = useState(false);
-
+    const limitIncreasedRef = useRef(false);
     const fetchRandomAds = () => {
         const shuffledAds = dummyAdData.sort(() => 0.5 - Math.random());
         const selectedAds = shuffledAds.slice(0, limit);
         setAds((prevAds) => [...prevAds, ...selectedAds]);
         console.log(limit);
-        if(limit===7){limit=8;}
-        if(limit===8){
-            limit=9;
+        if (!limitIncreasedRef.current) {
+            limit = limit + 1;
+            limitIncreasedRef.current = true;
         }
         setLoading(false);
     };
