@@ -6,15 +6,13 @@ const Advertisementlist = ({ limit }) => {
 
     const [ads, setAds] = useState([]);
     const [loading, setLoading] = useState(false);
-    const limitIncreasedRef = useRef(false);
     const fetchRandomAds = () => {
         const shuffledAds = dummyAdData.sort(() => 0.5 - Math.random());
         const selectedAds = shuffledAds.slice(0, limit);
         setAds((prevAds) => [...prevAds, ...selectedAds]);
         console.log(limit);
-        if (!limitIncreasedRef.current) {
+        if (limit===8) {
             limit = limit + 1;
-            limitIncreasedRef.current = true;
         }
         setLoading(false);
     };
