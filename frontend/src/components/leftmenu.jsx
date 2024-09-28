@@ -7,7 +7,7 @@ const Leftmenu = () => {
         <div className="flex flex-col gap-6">
             <Profilecard />
             <SidebarNav />
-            <Advertisementlist limit={2} />
+            <Advertisementlist limit={9} />
         </div>
     );
 }

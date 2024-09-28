@@ -11,10 +11,6 @@ const Advertisementlist = ({ limit }) => {
         const shuffledAds = dummyAdData.sort(() => 0.5 - Math.random());
         const selectedAds = shuffledAds.slice(0, limit);
         setAds((prevAds) => [...prevAds, ...selectedAds]);
-        limit+=2;
-        if(limit>6){
-            limit=5;
-        }
         setLoading(false);
     };
 
