@@ -9,7 +9,7 @@ const Rightmenu = () => {
             <Followrequest />
             <Birthdays />
             <Suggestions />
-            <Advertisementlist limit={6} />
+            <Advertisementlist limit={7} />
         </div>
     );
 }
