@@ -39,7 +39,7 @@ const Suggestions = () => {
             <div className="p-2 bg-white rounded-lg gap-4 shadow-md  text-sm ">
                 <div className="pb-4 px-4 mt-4  flex gap-4 justify-between text-sm ">
                     <span className="font-medium">Suggestions</span>
-                    <span className="font-xs text-gray-400 " onClick={() => {
+                    <span className="font-xs text-gray-400 cursor-pointer " onClick={() => {
                         fetchsuggestionHandler()
                     }}> Refresh</span>
                 </div>

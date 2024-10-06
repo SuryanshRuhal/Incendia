@@ -12,7 +12,6 @@ app.use(cors({
 
 const connectDb= async()=>{
   try {
-    
     const connect=await mongoose.connect(process.env.MONGO_URL);
     console.log("Database is Connected");
   } catch (err) {
@@ -28,12 +27,15 @@ const userroutes= require("./routes/userroute");
 const postroutes= require("./routes/postroutes");
 const storyroutes= require("./routes/storiesroutes");
 const commentroutes= require("./routes/commentroutes");
+const chatroutes= require("./routes/chatroutes");
+const messageroutes= require("./routes/messageroutes");
 
 app.use("/user",userroutes);
 app.use("/post",postroutes);
 app.use("/stories", storyroutes);
 app.use("/comments", commentroutes);
-
+app.use("/chats", chatroutes);
+app.use("/messages",messageroutes);
 app.get("/", (req, res) => {
     res.send("API is Activated");
   });

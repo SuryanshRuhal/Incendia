@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import HomeIcon from '@mui/icons-material/Home';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ExploreIcon from '@mui/icons-material/Explore';
+import MapsUgcIcon from '@mui/icons-material/MapsUgc';
 import { useState } from 'react';
 const Mobilemenu = () => {
 
@@ -29,6 +30,11 @@ const Mobilemenu = () => {
                 <Link to="/activity">
                     <div className="flex items-center m-3 gap-2 ">
                         <FavoriteBorderIcon className="!h-8 !w-8 cursor-pointer self-end" />
+                    </div>
+                </Link>
+                <Link to="/chathome/chatArea">
+                    <div className="flex items-center m-3 gap-2 ">
+                        <MapsUgcIcon className="!h-8 !w-8 cursor-pointer self-end" />
                     </div>
                 </Link>
                 <Link to="/explore">

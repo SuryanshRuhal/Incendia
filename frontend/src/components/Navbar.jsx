@@ -3,7 +3,7 @@ import Mobilemenu from "./Mobilebar";
 import img from "./logonav.png";
 import HomeIcon from '@mui/icons-material/Home';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import Diversity3Icon from '@mui/icons-material/Diversity3';
+import MapsUgcIcon from '@mui/icons-material/MapsUgc';
 import SearchIcon from '@mui/icons-material/Search';
 import { useState } from "react";
 
@@ -22,9 +22,9 @@ const Navbar = () => {
                         <HomeIcon />
                         <span>Home</span>
                     </Link>
-                    <Link to="/home" className="flex items-center gap-2">
-                        <Diversity3Icon />
-                        <span>Friends</span>
+                    <Link to="/chathome/chatArea" className="flex items-center gap-2">
+                        <MapsUgcIcon/>
+                        <span>Chats</span>
                     </Link>
                     <Link to="/home" className="flex items-center gap-2">
                         <AddCircleOutlineIcon />
@@ -43,7 +43,7 @@ const Navbar = () => {
                 <Mobilemenu />
             </div>
             <div className="hidden md:flex w-[30%] items-center gap-4 xl:gap-8 justify-end ">
-                <img src={userData?.data?.avatar} alt="" className="w-12 h-12 rounded-full ring-2 " />
+                <Link to={`/profile/${userData?.data?.username}`}><img src={userData?.data?.avatar} alt="" className="w-12 h-12 rounded-full ring-2 " /></Link>
             </div>
         </div>
     );
