@@ -20,7 +20,7 @@ export const SocketProvider = ({ children }) => {
 
     useEffect(() => {
         if (!userData?.data?._id) {
-            console.log("User not logged in, socket not initialized");
+           
             return;
         }
 
@@ -32,7 +32,7 @@ export const SocketProvider = ({ children }) => {
         newSocket.emit("setup", userData?.data);
 
         newSocket.on("connected", () => {
-            console.log("Socket connected");
+           
         });
 
         

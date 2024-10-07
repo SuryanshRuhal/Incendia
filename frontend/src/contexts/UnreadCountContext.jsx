@@ -10,24 +10,20 @@ export const UnreadCountProvider=({children})=>{
     const [unreadChats, setUnreadChats]= useState({});
     const addUnreadChat= (chatId)=>{
         setUnreadChats((prevUnreadChats)=>{
-            console.log("add start");
+            
             if(prevUnreadChats[chatId]){
-                console.log("add false");
                 return  prevUnreadChats;
             }
-            console.log("add true");
             return {...prevUnreadChats, [chatId]:true};
         })
     }
 
     const markChatAsRead= (chatId)=>{
         setUnreadChats((prevUnreadChats)=>{
-            console.log("mark start");
+
             if(!prevUnreadChats[chatId]){
-                console.log("mark false");
                 return prevUnreadChats;
             }
-            console.log("mark true");
             const { [chatId]: _, ...rest } = prevUnreadChats;
             return rest;
         })
