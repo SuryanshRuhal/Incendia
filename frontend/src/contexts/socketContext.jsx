@@ -20,17 +20,18 @@ export const SocketProvider = ({ children }) => {
 
     useEffect(() => {
         if (!userData?.data?._id) {
-           
+            console.log("userdata not present");
             return;
         }
 
         const newSocket = io("https://incendia-api.vercel.app");
+        console.log(newSocket);
         setSocket(newSocket);
 
         newSocket.emit("setup", userData?.data);
 
         newSocket.on("connected", () => {
-           
+            console.log("Socket connected");
         });
 
         
