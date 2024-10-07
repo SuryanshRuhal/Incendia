@@ -12,12 +12,16 @@ import FollowerUser from './followers';
 import MessageMaincontainer from './Messagemaincontainer';
 import MessageChatArea from './MessageChatArea';
 import MessageWelcomeArea from './Messagewelcome';
+import { UnreadCountProvider } from '../contexts/UnreadCountContext';
+import { SocketProvider } from '../contexts/socketContext';
 
 function App() {
   const Location = useLocation();
   const isSigninPage = Location.pathname === "/";
 
   return (
+    <UnreadCountProvider>
+      <SocketProvider>
     <div className='App bg-[url("https://i.pinimg.com/564x/99/45/1e/99451ea69bb1c4991db0c0ebca045b55.jpg")] bg-center bg-cover bg-no-repeat'>
       {!isSigninPage && (<div className='sticky top-0 w-full z-10 bg-white px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64'>
         <Navbar />
@@ -41,6 +45,8 @@ function App() {
         </Routes>
       </div>
     </div>
+    </SocketProvider>
+    </UnreadCountProvider>
   );
 }
 

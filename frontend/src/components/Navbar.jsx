@@ -1,15 +1,17 @@
 import { Link } from "react-router-dom";
 import Mobilemenu from "./Mobilebar";
 import img from "./logonav.png";
+import Badge from '@mui/material/Badge';
 import HomeIcon from '@mui/icons-material/Home';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import MapsUgcIcon from '@mui/icons-material/MapsUgc';
 import SearchIcon from '@mui/icons-material/Search';
 import { useState } from "react";
-
+import { useUnreadCount } from "../contexts/UnreadCountContext";
 const Navbar = () => {
     const userData = JSON.parse(localStorage.getItem("userData"));
     const [searchbar, setSearchBar] = useState("");
+    const {totalUnread}= useUnreadCount();
 
     return (
         <div className="h-20 flex items-center justify-between ">
@@ -23,7 +25,9 @@ const Navbar = () => {
                         <span>Home</span>
                     </Link>
                     <Link to="/chathome/chatArea" className="flex items-center gap-2">
+                    <Badge badgeContent={totalUnread} color="secondary">
                         <MapsUgcIcon/>
+                    </Badge>
                         <span>Chats</span>
                     </Link>
                     <Link to="/home" className="flex items-center gap-2">

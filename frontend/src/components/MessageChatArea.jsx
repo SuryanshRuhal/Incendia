@@ -4,6 +4,10 @@ import axios from 'axios';
 import CloseIcon from '@mui/icons-material/Close';
 import { Link, useParams, useLocation, useNavigate } from 'react-router-dom';
 import MessageText from './Messagetext';
+import io from "socket.io-client";
+import { useUnreadCount } from '../contexts/UnreadCountContext';
+import {useSocket} from "../contexts/socketContext";
+
 
 const MessageChatArea=(props)=>{
     const userData= JSON.parse(localStorage.getItem("userData"));
@@ -14,6 +18,11 @@ const MessageChatArea=(props)=>{
     const navigate= useNavigate();
     const location = useLocation();
     const {username, avatar}= location.state||{};
+    const [socketConnected,setSocketConnected]=useState(false);
+    const [typing, setTyping]= useState(false);
+    const [isTyping, setIsTyping]= useState(false);
+    const {addUnreadChat, markChatAsRead}= useUnreadCount();
+    const socket= useSocket();
 
     const fetchMessageHandler=async()=>{
         try {
@@ -23,13 +32,19 @@ const MessageChatArea=(props)=>{
                     Authorization :`Bearer ${userData?.data?.token}`,
                 }
             }
-            const response= await axios.get(`http://localhost:8080/messages/fetchmessages/${chatId}`, config );
+            const response= await axios.get(`https://incendia-api.vercel.app/messages/fetchmessages/${chatId}`, config );
             setMessageList(response?.data);
+            socket.emit("join chat", chatId);
+            const latestMessage = response?.data[response?.data.length - 1];
+            if (latestMessage && latestMessage.sender !== userData?.data?._id) {
+                markChatAsRead(chatId);
+            }
         } catch (error) {
             console.log(error);
         }
     }
     const createMessageHandler=async()=>{
+        socket.emit("stop typing", chatId);
         try {
             const config={
                 headers:{
@@ -38,18 +53,70 @@ const MessageChatArea=(props)=>{
                 }
             }
             const data= {content: newMessage};
-            const response= await axios.post(`http://localhost:8080/messages/newmessage/${chatId}`,data,config);
-            setMessageList((prevMessages) => [...prevMessages, response.data]);
+            const response= await axios.post(`https://incendia-api.vercel.app/messages/newmessage/${chatId}`,data,config);
+            socket.emit("new message",response?.data);
+            setMessageList((prevMessages) => [...prevMessages, response?.data]);
             setNewMessage("");
+            
         } catch (error) {
             console.log(error);
         }
-
     }
+    const typeHandler=(e)=>{
+        setNewMessage(e.target.value)
+        if(!socket)return;
+        if(!typing){
+            setTyping(true);
+            socket.emit("typing",chatId);
+        }
+        let lastTypingTime= new Date().getTime();
+        var timerLength= 3000;
+        setTimeout(()=>{
+             var timeNow= new Date().getTime();
+             var timeDiff= timeNow- lastTypingTime;
+
+             if(timeDiff>= timerLength && typing){
+                socket.emit("stop typing",chatId);
+                setTyping(false);
+             }
+        },timerLength);
+    }
+
+    useEffect(()=>{
+        if(!socket){
+            return;
+        }
+        socket.on("typing",()=>setIsTyping(true))
+        socket.on("stop typing",()=>setIsTyping(false))
+        return () => {
+            socket.off("typing");
+            socket.off("stop typing");
+        };
+    },[])
+
     useEffect(()=>{
         fetchMessageHandler();
-    },[]);
+    },[chatId]);
 
+    useEffect(()=>{
+        if(!socket){
+            return;
+        }
+        const messageReceivedHandler =(newMessageRecieved)=>{
+            if(chatId!==newMessageRecieved.chat._id){
+                addUnreadChat(newMessageRecieved.chat._id);
+            }else{
+                setMessageList((prevMessages) => [...prevMessages, newMessageRecieved])
+            }
+        }
+        socket.on("message recieved",messageReceivedHandler)
+
+        return () => {
+            socket.off("message recieved", messageReceivedHandler);
+        };
+    },[socket, chatId, addUnreadChat, markChatAsRead])
+
+   
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [messageList]);
@@ -79,8 +146,14 @@ const MessageChatArea=(props)=>{
         )})}
         <div ref={messagesEndRef} />
     </div>
+    {isTyping? <div className='ml-4 text-purple-950 italic '> Typing....</div> :<></>}
     <div className=" ml-2 m-1 flex gap-2 w-full bottom-0 sticky items-center ">
-        <textarea name="Message" value={newMessage} className='shadow-xl rounded-lg w-[93%]' placeholder="Type a message..." onChange={(e)=>setNewMessage(e.target.value)}/>
+        <textarea name="Message" value={newMessage} className='shadow-xl pl-2 rounded-lg w-[93%]' placeholder="Type a message..." onChange={typeHandler}  onKeyPress={(e) => {
+                            if (e.key === 'Enter' && !e.shiftKey) {
+                                e.preventDefault();
+                                createMessageHandler();
+                            }
+                        }}/>
         <SendIcon className={`cursor-pointer mr-2`} onClick={createMessageHandler}/>
     </div>
     </div>

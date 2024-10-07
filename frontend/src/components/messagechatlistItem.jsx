@@ -16,7 +16,7 @@ const ChatListItem = (props) => {
                     Authorization: `Bearer ${userData?.data?.token}`,
                 }
             }
-            const response = await axios.get(`http://localhost:8080/chats/access/${props.id}`, config);
+            const response = await axios.get(`https://incendia-api.vercel.app/chats/access/${props.id}`, config);
             if (response.status === 200 ) {
                 nav(`chatArea/${response?.data?._id}`,{
                     state: { username:props?.chatname, avatar:props?.avatar}
@@ -42,15 +42,15 @@ const ChatListItem = (props) => {
          </Backdrop>
             
                 <div className=" bg-white rounded-lg my-2 flex gap-2 shadow-md" onClick={createChatHandler}>
-                    <div>
+                    <div className="">
                         <Link to={`/profile/${props?.chatname}`}>
-                            <img src={props?.avatar} alt="" className=" mx-2 my-2 h-12 w-12 rounded-full ring-2 " />
+                            <img src={props?.avatar} alt="" className=" mx-2 my-2 h-12 !w-12 min-w-12 rounded-full ring-2 " />
                         </Link>
                     </div>
                     <Link to={`/chathome/chatArea`}>
                     <div className=" my-2 ml-2"   onClick={createChatHandler}>
                         <p className="font-bold text-sm text-left" >{props?.chatname}</p>
-                        <p className=" text-xs text-left" > {props?.latestmessage} </p>
+                        <p className=" text-xs text-left w-[50%] truncate " > {props?.latestmessage} </p>
                     </div>
                     </Link>
                 </div>

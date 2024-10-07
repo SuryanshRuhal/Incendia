@@ -2,12 +2,15 @@ import { Link } from "react-router-dom";
 import HomeIcon from '@mui/icons-material/Home';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ExploreIcon from '@mui/icons-material/Explore';
+import Badge from '@mui/material/Badge';
 import MapsUgcIcon from '@mui/icons-material/MapsUgc';
 import { useState } from 'react';
+import { useUnreadCount } from "../contexts/UnreadCountContext";
 const Mobilemenu = () => {
 
     const userData = JSON.parse(localStorage.getItem("userData"));
     const [isopen, setIsopen] = useState(false);
+    const {totalUnread}= useUnreadCount();
     return (
         <div className="md:hidden ">
             <div className="flex flex-col gap-[4.5px] cursor-pointer " onClick={() => {
@@ -34,7 +37,9 @@ const Mobilemenu = () => {
                 </Link>
                 <Link to="/chathome/chatArea">
                     <div className="flex items-center m-3 gap-2 ">
+                    <Badge badgeContent={totalUnread} color="secondary">
                         <MapsUgcIcon className="!h-8 !w-8 cursor-pointer self-end" />
+                      </Badge>  
                     </div>
                 </Link>
                 <Link to="/explore">

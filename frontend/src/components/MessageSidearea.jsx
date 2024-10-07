@@ -5,6 +5,9 @@ import { Backdrop, CircularProgress, } from "@mui/material";
 import MessageChatList from "./messageChatList";
 import ChatListItem from "./messagechatlistItem";
 import axios from "axios";
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import Badge from '@mui/material/Badge';
+import { useUnreadCount } from "../contexts/UnreadCountContext";
 
 const MessageSideArea = () => {
     const [searchbar, setSearchBar] = useState("");
@@ -12,6 +15,7 @@ const MessageSideArea = () => {
     const [followingList, setFollowingList] = useState([]);
     const [loading, setLoading] = useState(false);
     const userData = JSON.parse(localStorage.getItem("userData"));
+    const {totalUnread}= useUnreadCount();
 
     const fetchFollowingList = async () => {
         setLoading(true);
@@ -23,7 +27,7 @@ const MessageSideArea = () => {
                 }
             }
             const senduser= {chatuser: searchbar}
-            const response = await axios.post(`http://localhost:8080/chats/searchfollowing`, senduser, config);
+            const response = await axios.post(`https://incendia-api.vercel.app/chats/searchfollowing`, senduser, config);
             setVisible(true);
             setFollowingList(response?.data);
         } catch (error) {
@@ -62,6 +66,9 @@ const MessageSideArea = () => {
             <div className=" flex-1 overflow-y-scroll scrollbar-hide::-webkit-scrollbar scrollbar-hide mt-3 bg-white rounded-lg  shadow-lg text-sm">
             <div className="flex px-2 bg-teal-50 shadow-md w-full pt-2 justify-between sticky top-0 z-8">
                 <p className="font-bold ml-2 my-2">Messages</p>
+                    <Badge badgeContent={totalUnread} color="secondary">
+                       <NotificationsIcon/>
+                    </Badge>
             </div>
             <div className="m-2">
             <MessageChatList />

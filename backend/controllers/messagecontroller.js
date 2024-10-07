@@ -15,6 +15,7 @@ const sendMessageController=expressAsyncHandler(async(req,res)=>{
         await Chat.findByIdAndUpdate(req.params.chatId,
             {latestMessage: content}
         )
+        await message.populate("chat","users");
         res.status(201).json(message);
     } catch (error) {
         res.status(500);
@@ -25,6 +26,7 @@ const sendMessageController=expressAsyncHandler(async(req,res)=>{
 const fetchChatMessagesController= expressAsyncHandler(async(req,res)=>{
    try {
     const messages= await Message.find({chat:req.params.chatId})
+    .populate("chat", "users")
     .sort({updatedAt:1});
     res.status(201).json(messages);
    } catch (error) {
