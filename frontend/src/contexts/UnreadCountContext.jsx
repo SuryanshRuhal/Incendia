@@ -1,4 +1,5 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext,useEffect, useState } from "react";
+import axios from "axios";
 
 const UnreadCountContext= createContext();
 
@@ -8,6 +9,7 @@ export const useUnreadCount=()=>{
 
 export const UnreadCountProvider=({children})=>{
     const [unreadChats, setUnreadChats]= useState({});
+    const userData= JSON.parse(localStorage.getItem("userData"));
 
     useEffect(() => {
         const fetchUnreadChats = async () => {

@@ -75,8 +75,19 @@ const markChatAsReadController = expressAsyncHandler(async (req, res) => {
         throw new Error("Failed to mark chat as read");
     }
 });
+
+const fetchUnreadChatsController = expressAsyncHandler(async (req, res) => {
+    try {
+        const user = await User.findById(req.user._id).populate('unreadChats.chat', 'chatName');
+        res.status(200).json(user.unreadChats);
+    } catch (error) {
+        res.status(500);
+        throw new Error("Failed to fetch unread chats");
+    }
+});
 module.exports={
     sendMessageController,
     fetchChatMessagesController,
-    markChatAsReadController
+    markChatAsReadController,
+    fetchUnreadChatsController
 }
