@@ -49,7 +49,7 @@ const Addpost = () => {
                 }
             };
 
-            await axios.post(`https://incendia-api.vercel.app/post/create`, postPayload, config);
+            await axios.post(`https://incendia-api.onrender.com/post/create`, postPayload, config);
 
             fileInputRef.current.value = null;
             setCaption("");

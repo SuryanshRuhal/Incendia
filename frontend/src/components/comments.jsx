@@ -28,7 +28,7 @@ const Comment = (props) => {
                 }
             }
 
-            const response = await axios.get(`https://incendia-api.vercel.app/comments/liked/${props.id}`, config);
+            const response = await axios.get(`https://incendia-api.onrender.com/comments/liked/${props.id}`, config);
             setUserLike(response?.data?.likedby);
         } catch (error) {
             console.log();
@@ -57,7 +57,7 @@ const Comment = (props) => {
                     Authorization: `Bearer ${userData?.data?.token}`
                 }
             }
-            const response = await axios.get(`https://incendia-api.vercel.app/comments/fetchReplies/${props.postid}/parentComment/${props.id}`, config)
+            const response = await axios.get(`https://incendia-api.onrender.com/comments/fetchReplies/${props.postid}/parentComment/${props.id}`, config)
             setReplies(response?.data);
         } catch (error) {
             console.log(error.message);

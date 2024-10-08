@@ -46,7 +46,7 @@ const Signin = () => {
                 },
             };
             const response = await axios.post(
-                "https://incendia-api.vercel.app/user/signin",
+                "https://incendia-api.onrender.com/user/signin",
                 contact,
                 config
             );
@@ -69,7 +69,7 @@ const Signin = () => {
             }
 
             const response = await axios.post(
-                "https://incendia-api.vercel.app/user/register",
+                "https://incendia-api.onrender.com/user/register",
                 contact,
                 config
             );

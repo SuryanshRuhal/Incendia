@@ -20,7 +20,7 @@ const Birthdays = () => {
                 }
             }
             const response = await axios.get(
-                `https://incendia-api.vercel.app/user/todaybirthday`, config
+                `https://incendia-api.onrender.com/user/todaybirthday`, config
             );
             setbirthdayItem(response?.data);
         } catch (error) {
@@ -39,7 +39,7 @@ const Birthdays = () => {
                 }
             }
             const response = await axios.get(
-                `https://incendia-api.vercel.app/user/upcomingbirthdays`, config
+                `https://incendia-api.onrender.com/user/upcomingbirthdays`, config
             )
             setUpcomingBirthdays(response?.data);
 

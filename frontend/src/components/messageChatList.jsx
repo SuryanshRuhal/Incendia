@@ -16,7 +16,7 @@ const MessageChatList = () => {
                     Authorization:`Bearer ${userData?.data?.token}`,
                 }
             }
-            const response= await axios.get(`https://incendia-api.vercel.app/chats/fetchchats`,config);
+            const response= await axios.get(`https://incendia-api.onrender.com/chats/fetchchats`,config);
             setChatlist(response?.data);
         } catch (error) {
             alert("Chat fetching failed!")

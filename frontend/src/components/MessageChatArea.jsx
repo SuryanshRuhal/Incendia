@@ -32,7 +32,7 @@ const MessageChatArea=(props)=>{
                     Authorization :`Bearer ${userData?.data?.token}`,
                 }
             }
-            const response= await axios.get(`https://incendia-api.vercel.app/messages/fetchmessages/${chatId}`, config );
+            const response= await axios.get(`https://incendia-api.onrender.com/messages/fetchmessages/${chatId}`, config );
             setMessageList(response?.data);
             socket.emit("join chat", chatId);
             const latestMessage = response?.data[response?.data.length - 1];
@@ -53,7 +53,7 @@ const MessageChatArea=(props)=>{
                 }
             }
             const data= {content: newMessage};
-            const response= await axios.post(`https://incendia-api.vercel.app/messages/newmessage/${chatId}`,data,config);
+            const response= await axios.post(`https://incendia-api.onrender.com/messages/newmessage/${chatId}`,data,config);
             socket.emit("new message",response?.data);
             setMessageList((prevMessages) => [...prevMessages, response?.data]);
             setNewMessage("");

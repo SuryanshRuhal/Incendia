@@ -27,7 +27,7 @@ const MessageSideArea = () => {
                 }
             }
             const senduser= {chatuser: searchbar}
-            const response = await axios.post(`https://incendia-api.vercel.app/chats/searchfollowing`, senduser, config);
+            const response = await axios.post(`https://incendia-api.onrender.com/chats/searchfollowing`, senduser, config);
             setVisible(true);
             setFollowingList(response?.data);
         } catch (error) {

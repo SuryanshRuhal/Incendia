@@ -18,7 +18,7 @@ const FollowingUser = () => {
                     Authorization: `Bearer ${userData?.data?.token}`,
                 }
             }
-            const response = await axios.get(`https://incendia-api.vercel.app/user/fetchFollowing/${username}`, config);
+            const response = await axios.get(`https://incendia-api.onrender.com/user/fetchFollowing/${username}`, config);
             setFollowingList(response?.data?.following);
         } catch (error) {
             console.log(error.message);

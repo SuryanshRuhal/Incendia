@@ -24,7 +24,7 @@ export const SocketProvider = ({ children }) => {
             return;
         }
 
-        const newSocket = io("https://incendia-api.vercel.app");
+        const newSocket = io("https://incendia-api.onrender.com/");
         console.log(newSocket);
         setSocket(newSocket);
 

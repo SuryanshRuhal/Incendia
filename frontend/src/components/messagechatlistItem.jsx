@@ -16,7 +16,7 @@ const ChatListItem = (props) => {
                     Authorization: `Bearer ${userData?.data?.token}`,
                 }
             }
-            const response = await axios.get(`https://incendia-api.vercel.app/chats/access/${props.id}`, config);
+            const response = await axios.get(`https://incendia-api.onrender.com/chats/access/${props.id}`, config);
             if (response.status === 200 ) {
                 nav(`chatArea/${response?.data?._id}`,{
                     state: { username:props?.chatname, avatar:props?.avatar}

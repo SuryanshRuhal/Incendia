@@ -44,7 +44,7 @@ const ProfileInfo = () => {
       };
 
       const response = await axios.post(
-        `https://incendia-api.vercel.app/user/profileupdate/${userData.data._id}`,
+        `https://incendia-api.onrender.com/user/profileupdate/${userData.data._id}`,
         profileUpdatePayload,
         config
       );

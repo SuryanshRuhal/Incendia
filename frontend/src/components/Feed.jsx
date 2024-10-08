@@ -23,7 +23,7 @@ const Feed = ({ size }) => {
                     Authorization: `Bearer ${userData.data.token}`,
                 }
             }
-            const response = await axios.get(`https://incendia-api.vercel.app/post?limit=${limit}&skip=${skipRef.current}`, config);
+            const response = await axios.get(`https://incendia-api.onrender.com/post?limit=${limit}&skip=${skipRef.current}`, config);
             if (response.data.length === 0) {
                 skipRef.current = 0;
                 return;
