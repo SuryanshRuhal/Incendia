@@ -28,9 +28,20 @@ export const UnreadCountProvider=({children})=>{
             return rest;
         })
     }
+    const setUnreadChatsForUser = (chatList) => {
+        const unread = {};
+        chatList.forEach(chat => {
+            unread[chat.id] = true; 
+        });
+        setUnreadChats(unread);
+    };
+
+    const resetUnreadChats = () => {
+        setUnreadChats({});
+    };
     const totalUnread = Object.keys(unreadChats).length;
     return (
-        <UnreadCountContext.Provider value={{ unreadChats, addUnreadChat, markChatAsRead, totalUnread }}>
+        <UnreadCountContext.Provider value={{ unreadChats, addUnreadChat, markChatAsRead, setUnreadChats, resetUnreadChats, totalUnread }}>
             {children}
         </UnreadCountContext.Provider>
     )
