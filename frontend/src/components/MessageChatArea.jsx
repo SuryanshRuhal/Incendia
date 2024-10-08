@@ -4,7 +4,6 @@ import axios from 'axios';
 import CloseIcon from '@mui/icons-material/Close';
 import { Link, useParams, useLocation, useNavigate } from 'react-router-dom';
 import MessageText from './Messagetext';
-import io from "socket.io-client";
 import { useUnreadCount } from '../contexts/UnreadCountContext';
 import {useSocket} from "../contexts/socketContext";
 
@@ -18,7 +17,6 @@ const MessageChatArea=(props)=>{
     const navigate= useNavigate();
     const location = useLocation();
     const {username, avatar}= location.state||{};
-    const [socketConnected,setSocketConnected]=useState(false);
     const [typing, setTyping]= useState(false);
     const [isTyping, setIsTyping]= useState(false);
     const {addUnreadChat, markChatAsRead}= useUnreadCount();
@@ -38,12 +36,14 @@ const MessageChatArea=(props)=>{
             const latestMessage = response?.data[response?.data.length - 1];
             if (latestMessage && latestMessage.sender !== userData?.data?._id) {
                 markChatAsRead(chatId);
+                await axios.put(`https://incendia-api.onrender.com/messages/markasread/${chatId}`, {}, config);
             }
         } catch (error) {
             console.log(error);
         }
     }
     const createMessageHandler=async()=>{
+        if (newMessage.trim() === "") return;
         socket.emit("stop typing", chatId);
         try {
             const config={
@@ -109,12 +109,21 @@ const MessageChatArea=(props)=>{
                 setMessageList((prevMessages) => [...prevMessages, newMessageRecieved])
             }
         }
-        socket.on("message recieved",messageReceivedHandler)
+        socket.on("message recieved",messageReceivedHandler);
+        markChatAsRead(chatId); 
+
+                const config = {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${userData?.data?.token}`,
+                    }
+                }
+                axios.put(`https://incendia-api.onrender.com/messages/markasread/${chatId}`, {}, config)
 
         return () => {
             socket.off("message recieved", messageReceivedHandler);
         };
-    },[socket, chatId, addUnreadChat, markChatAsRead])
+    },[socket, chatId, addUnreadChat, markChatAsRead,userData])
 
    
     useEffect(() => {

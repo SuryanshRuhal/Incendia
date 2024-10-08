@@ -74,7 +74,23 @@ const userModel= mongoose.Schema(
         type:[mongoose.Schema.Types.ObjectId],
         ref: "post",
         default:[],
-    }
+    },
+    unreadChats:[
+        {
+            chat:{
+                type: mongoose.Schema.Types.ObjectId,
+                ref:"Chat",
+                required: true,
+            },
+            count:{
+                type:Number,
+                default:0,
+                min:0,
+            }
+        }
+    ]
+},{
+    timestamps:true,
 })
 
 userModel.methods.matchPassword= async function(enteredPassword) { 

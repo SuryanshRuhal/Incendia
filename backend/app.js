@@ -50,6 +50,8 @@ const io = require("socket.io")(server,{
   }
 })
 
+app.set('io', io);
+
 io.on("connection",(socket)=>{
 
   socket.on("setup",(userData)=>{
