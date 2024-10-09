@@ -30,13 +30,14 @@ const MessageChatArea=(props)=>{
                     Authorization :`Bearer ${userData?.data?.token}`,
                 }
             }
+            console.log("new");
             const response= await axios.get(`https://incendia-api.onrender.com/messages/fetchmessages/${chatId}`, config );
             setMessageList(response?.data);
             socket.emit("join chat", chatId);
             const latestMessage = response?.data[response?.data.length - 1];
-            if (latestMessage && latestMessage.sender !== userData?.data?._id) {
+            if (latestMessage && latestMessage.sender.toString() !== userData?.data?._id.toString()) {
                 markChatAsRead(chatId);
-                await axios.put(`https://incendia-api.onrender.com/messages/markasread/${chatId}`, {}, config);
+                 await axios.put(`https://incendia-api.onrender.com/messages/markasread/${chatId}`, {}, config);
             }
         } catch (error) {
             console.log(error);
@@ -55,7 +56,6 @@ const MessageChatArea=(props)=>{
             const data= {content: newMessage};
             const response= await axios.post(`https://incendia-api.onrender.com/messages/newmessage/${chatId}`,data,config);
             socket.emit("new message",response?.data);
-            setMessageList((prevMessages) => [...prevMessages, response?.data]);
             setNewMessage("");
             
         } catch (error) {
@@ -92,26 +92,22 @@ const MessageChatArea=(props)=>{
             socket.off("typing");
             socket.off("stop typing");
         };
-    },[])
+    },[socket])
 
     useEffect(()=>{
         fetchMessageHandler();
-    },[chatId]);
+    },[]);
 
     useEffect(()=>{
         if(!socket){
             return;
         }
         const messageReceivedHandler =(newMessageRecieved)=>{
-            if(chatId!==newMessageRecieved.chat._id){
+            if(chatId!==newMessageRecieved.chat._id.toString()){
                 addUnreadChat(newMessageRecieved.chat._id);
             }else{
                 setMessageList((prevMessages) => [...prevMessages, newMessageRecieved])
-            }
-        }
-        socket.on("message recieved",messageReceivedHandler);
-        markChatAsRead(chatId); 
-
+                markChatAsRead(chatId); 
                 const config = {
                     headers: {
                         "Content-Type": "application/json",
@@ -119,11 +115,15 @@ const MessageChatArea=(props)=>{
                     }
                 }
                 axios.put(`https://incendia-api.onrender.com/messages/markasread/${chatId}`, {}, config)
+            }
+        }
+
+        socket.on("message received",messageReceivedHandler);
 
         return () => {
-            socket.off("message recieved", messageReceivedHandler);
+            socket.off("message received", messageReceivedHandler);
         };
-    },[socket, chatId, addUnreadChat, markChatAsRead,userData])
+    },[socket, chatId, addUnreadChat, markChatAsRead, userData])
 
    
     useEffect(() => {

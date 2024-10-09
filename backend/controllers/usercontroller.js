@@ -1,7 +1,6 @@
 const expressAsyncHandler =require("express-async-handler");
 const generatetoken= require("../config/generatetoken");
 const userModel = require("../modals/UserModel");
-const { omitUndefined } = require("mongoose");
 
 const registercontroller= expressAsyncHandler(async (req, res)=>{
     const {fname, lname, username, creationdate, email, password }= req.body;
@@ -43,6 +42,10 @@ const logincontroller= expressAsyncHandler(async (req, res)=>{
     const {email,password} = req.body;
 
     const user= await userModel.findOne({email});
+    if (!user) {
+        res.status(404);
+        throw new Error("User not found.");
+    }
     if(user && await user.matchPassword(password)){
         const response={
             _id: user._id,
@@ -67,6 +70,27 @@ const logincontroller= expressAsyncHandler(async (req, res)=>{
         res.send(401);
         throw new Error("Incorrect Username or Password");
     }
+});
+
+const passwordResetController = expressAsyncHandler(async (req, res) => {
+    const { email, newPassword } = req.body;
+
+    if (!email || !newPassword) {
+        res.status(400);
+        throw new Error("Email and new password are required.");
+    }
+
+    const user = await userModel.findOne({ email });
+    if (!user) {
+        res.status(404);
+        throw new Error("User not found.");
+    }
+
+    user.password = newPassword;
+
+    await user.save();
+
+    res.status(200).json({ message: "Password reset successful." });
 });
 const userInfocontroller = expressAsyncHandler(async (req, res) => {
     const update = req.body;
@@ -149,5 +173,6 @@ module.exports={
     fetchperticularUsercontroller,
     fetchSuggestionsController,
     fetchFollowerController,
-    fetchFollowingController
+    fetchFollowingController,
+    passwordResetController
 }

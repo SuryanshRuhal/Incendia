@@ -1,5 +1,5 @@
 const express= require("express");
-const {registercontroller, logincontroller, userInfocontroller, fetchperticularUsercontroller, fetchSuggestionsController, fetchFollowerController, fetchFollowingController} = require("../controllers/usercontroller");
+const {registercontroller, logincontroller, userInfocontroller, fetchperticularUsercontroller, fetchSuggestionsController, fetchFollowerController, fetchFollowingController, passwordResetController} = require("../controllers/usercontroller");
 const {protect} = require("../middleware/authorizationmiddleware");
 const { todayBirthdaycontroller, upcomingBirthdayController } = require("../controllers/birthdays");
 const { sendRequestController, fetchRequestsController, acceptRequestController, cancelRequestController, checkFollowStatus } = require("../controllers/followrequest");
@@ -20,6 +20,7 @@ router.get("/rejectrequest/:userId",protect, cancelRequestController);
 router.get("/checkfollowstatus/:userId",protect, checkFollowStatus);
 router.get("/fetchFollowers/:username",protect, fetchFollowerController);
 router.get("/fetchFollowing/:username",protect, fetchFollowingController);
+router.post("/reset-password", passwordResetController);
 
 
 module.exports= router;

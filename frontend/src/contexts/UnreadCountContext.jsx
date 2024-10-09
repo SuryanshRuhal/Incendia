@@ -8,60 +8,82 @@ export const useUnreadCount=()=>{
 }
 
 export const UnreadCountProvider=({children})=>{
-    const [unreadChats, setUnreadChats]= useState({});
-    const userData= JSON.parse(localStorage.getItem("userData"));
+    const [unreadChats, setUnreadChats]= useState([]);
+    const [userData, setUserData] = useState(() => {
+        const data = localStorage.getItem("userData");
+        return data ? JSON.parse(data) : null;
+    })
 
+    const fetchUnreadChats = async (token) => {
+        try {
+            const config = {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+            };
+            const response = await axios.get(`https://incendia-api.onrender.com/messages/unread`, config);
+            setUnreadChats(response.data);
+        } catch (error) {
+            console.log("Error fetching unread chats:", error);
+        }
+    };
+
+  
     useEffect(() => {
-        const fetchUnreadChats = async () => {
-            if (!userData) return; // Don't fetch if userData is not available
-            
-            try {
-                const config = {
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${userData.data.token}`,
-                    },
-                };
-                const response = await axios.get(`https://incendia-api.onrender.com/messages/unread`, config);
-                setUnreadChatsForUser(response.data);
-            } catch (error) {
-                console.log("Error fetching unread chats:", error);
-            }
-        };
-
-        fetchUnreadChats();
-    }, [userData]);
-
+        const userData = JSON.parse(localStorage.getItem("userData"));
+        if (userData && userData.token) {
+            fetchUnreadChats(userData.token);
+        }
+    }, [userData.token]);
     const setUnreadChatsForUser = (chatList) => {
-        const unread = {};
-        chatList.forEach(chat => {
-            unread[chat.chat] = chat.count; 
-        });
-        setUnreadChats(unread);
+        setUnreadChats(chatList);
     };
 
     const addUnreadChat = (chatId) => {
-        setUnreadChats((prevUnreadChats) => ({
-            ...prevUnreadChats,
-            [chatId]: (prevUnreadChats[chatId] || 0) + 1
-        }));
+        setUnreadChats((prevUnreadChats) => {
+            const chatIndex = prevUnreadChats.findIndex(
+                (chat) => chat.chat.toString() === chatId.toString()
+            );
+
+            if (chatIndex !== -1) {
+                const updatedChats = [...prevUnreadChats];
+                updatedChats[chatIndex].count += 1;
+                console.log(updatedChats[chatIndex].count)
+                return updatedChats;
+            } else {
+                return [...prevUnreadChats, { chat: chatId, count: 1 }];
+            }
+    });
     };
 
    
     const markChatAsRead = (chatId) => {
-        setUnreadChats((prevUnreadChats) => ({
-            ...prevUnreadChats,
-            [chatId]: 0
-        }));
+        setUnreadChats((prevUnreadChats) => {
+            const updatedChats = prevUnreadChats.map((chat) => {
+                if (chat.chat.toString() === chatId.toString()) {
+                    return { ...chat, count: 0 };
+                }
+                return chat;
+            });
+            return updatedChats;
+        });
     };
  
     const resetUnreadChats = () => {
-        setUnreadChats({});
+        setUnreadChats([]);
     };
 
-    const totalUnread = Object.values(unreadChats).reduce((acc, count) => acc + count, 0);
+    const totalUnread = unreadChats.filter(chat => chat.count > 0).length;
+
+
+    const getUnreadCountForChat = (chatId) => {
+        const chat = unreadChats.find(chat => chat.chat.toString() === chatId.toString());
+        return chat ? chat.count : 0; 
+    };
+
     return (
-        <UnreadCountContext.Provider value={{ unreadChats, setUnreadChatsForUser, addUnreadChat, markChatAsRead, resetUnreadChats, totalUnread }}>
+        <UnreadCountContext.Provider value={{ unreadChats, setUnreadChatsForUser, addUnreadChat, markChatAsRead, resetUnreadChats, totalUnread , getUnreadCountForChat}}>
             {children}
         </UnreadCountContext.Provider>
     )

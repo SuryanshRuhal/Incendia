@@ -32,6 +32,7 @@ const sendMessageController=expressAsyncHandler(async(req,res)=>{
                     recipient.unreadChats.push({ chat: req.params.chatId, count:1 });
                 }
                 await recipient.save();
+                
             }
         }));
 
@@ -59,16 +60,12 @@ const fetchChatMessagesController= expressAsyncHandler(async(req,res)=>{
 
 const markChatAsReadController = expressAsyncHandler(async (req, res) => {
     const { chatId } = req.params;
-
+    console.log("chatId:", chatId);
     try {
-        const user = await User.findById(req.user._id);
-        if(user){
-            const unreadChat = user.unreadChats.find(uc => uc.chat.toString() === chatId);
-            if(unreadChat){
-                unreadChat.count = 0;
-                await user.save();
-            }
-        }
+        const result = await User.updateOne(
+            { _id: req.user._id },
+            { $pull: { unreadChats: { chat: chatId } } } 
+        );
         res.status(200).json({ message: "Chat marked as read" });
     } catch (error) {
         res.status(500);
@@ -79,6 +76,9 @@ const markChatAsReadController = expressAsyncHandler(async (req, res) => {
 const fetchUnreadChatsController = expressAsyncHandler(async (req, res) => {
     try {
         const user = await User.findById(req.user._id).populate('unreadChats.chat', 'chatName');
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
         res.status(200).json(user.unreadChats);
     } catch (error) {
         res.status(500);

@@ -1,4 +1,3 @@
-// src/contexts/socketContext.js
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
 import { useUnreadCount } from './UnreadCountContext';
@@ -15,7 +14,9 @@ export const useSocket = () => {
 
 export const SocketProvider = ({ children }) => {
     const [socket, setSocket] = useState(null);
-    const { addUnreadChat } = useUnreadCount();
+    
+
+    const {setUnreadChatsForUser,  addUnreadChat } = useUnreadCount();
     const userData = JSON.parse(localStorage.getItem("userData"));
 
     useEffect(() => {
@@ -24,7 +25,7 @@ export const SocketProvider = ({ children }) => {
             return;
         }
 
-        const newSocket = io("https://incendia-api.onrender.com/");
+        const newSocket = io("https://incendia-api.onrender.com");
         console.log(newSocket);
         setSocket(newSocket);
 
@@ -34,10 +35,13 @@ export const SocketProvider = ({ children }) => {
             console.log("Socket connected");
         });
 
+        newSocket.on("unread_counts", (unreadCounts) => {
+            setUnreadChatsForUser(unreadCounts);
+        });
         
-        newSocket.on("message recieved", (newMessageRecieved) => {
-            if (newMessageRecieved.chat._id) {
-                addUnreadChat(newMessageRecieved.chat._id);
+        newSocket.on("message received", (newMessageRecieved) => {
+            if (newMessageRecieved.sender !== userData?.data?._id && newMessageRecieved.chat._id) {
+                    addUnreadChat(newMessageRecieved.chat._id);
             }
         });
 
@@ -54,7 +58,7 @@ export const SocketProvider = ({ children }) => {
         return () => {
             newSocket.disconnect();
         };
-    }, []);
+    }, [userData.data.token]);
 
     return (
         <SocketContext.Provider value={{ socket }}>

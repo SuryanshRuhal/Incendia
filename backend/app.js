@@ -3,6 +3,7 @@ const dotenv = require("dotenv");
 const { default: mongoose } = require("mongoose");
 const app = express();
 const cors =require("cors");
+const User= require("./modals/UserModel");
 
 dotenv.config();
 
@@ -52,11 +53,19 @@ const io = require("socket.io")(server,{
 
 app.set('io', io);
 
-io.on("connection",(socket)=>{
+io.on("connection",async(socket)=>{
 
-  socket.on("setup",(userData)=>{
+  socket.on("setup",async(userData)=>{
     socket.join(userData._id);
     socket.emit("connected");
+    try {
+      const user = await User.findById(userData._id).populate('unreadChats.chat', 'chatName');
+      if (user) {
+          socket.emit("unread_counts", user.unreadChats);
+      }
+  } catch (error) {
+      console.log("Error fetching unread counts:", error);
+  }
   });
 
   socket.on("join chat",(room)=>{
@@ -71,7 +80,7 @@ io.on("connection",(socket)=>{
     if(!chat.users) return console.log("users not found")
     chat.users.forEach(user=>{
     if(user== newmessageRecieved.sender) return;
-    socket.in(user).emit("message recieved", newmessageRecieved) 
+    socket.in(user).emit("message received", newmessageRecieved) 
     })
   })
 }) 

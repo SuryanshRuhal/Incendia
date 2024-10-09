@@ -17,6 +17,7 @@ const MessageChatList = () => {
                 }
             }
             const response= await axios.get(`https://incendia-api.onrender.com/chats/fetchchats`,config);
+            console.log(response?.data)
             setChatlist(response?.data);
         } catch (error) {
             alert("Chat fetching failed!")
@@ -36,7 +37,7 @@ useEffect(()=>{
             </Backdrop> 
             <div className="">
                 {chatlist.map((list, index) => {
-                    return <ChatListItem key={list?._id} id={list?.users[0]?._id} chatname={list?.users[0]?.username} avatar={list?.users[0]?.avatar}  latestmessage={list?.latestMessage}/>
+                    return <ChatListItem key={list?._id} id={list?._id} userId={list?.users[0]?._id} chatname={list?.users[0]?.username} avatar={list?.users[0]?.avatar}  latestmessage={list?.latestMessage}/>
                 })}
             </div>
         </> 

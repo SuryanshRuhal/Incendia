@@ -80,7 +80,6 @@ const userModel= mongoose.Schema(
             chat:{
                 type: mongoose.Schema.Types.ObjectId,
                 ref:"Chat",
-                required: true,
             },
             count:{
                 type:Number,
@@ -98,7 +97,7 @@ userModel.methods.matchPassword= async function(enteredPassword) {
 }
 
 userModel.pre("save",async function(next){
-    if(!this.isModified){
+    if(!this.isModified("password")|| !this.password){
         next();
     }
 

@@ -2,9 +2,11 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useState } from "react";
 import { Backdrop, CircularProgress, } from "@mui/material";
+import { useUnreadCount } from "../contexts/UnreadCountContext";
 const ChatListItem = (props) => {
     const [loading, setLoading] = useState(false);
     const userData = JSON.parse(localStorage.getItem("userData"));
+    const {getUnreadCountForChat} = useUnreadCount();
     const nav= useNavigate();
 
     const createChatHandler = async () => {
@@ -16,7 +18,7 @@ const ChatListItem = (props) => {
                     Authorization: `Bearer ${userData?.data?.token}`,
                 }
             }
-            const response = await axios.get(`https://incendia-api.onrender.com/chats/access/${props.id}`, config);
+            const response = await axios.get(`https://incendia-api.onrender.com/chats/access/${props.userId}`, config);
             if (response.status === 200 ) {
                 nav(`chatArea/${response?.data?._id}`,{
                     state: { username:props?.chatname, avatar:props?.avatar}
@@ -50,7 +52,11 @@ const ChatListItem = (props) => {
                     <Link to={`/chathome/chatArea`}>
                     <div className=" my-2 ml-2"   onClick={createChatHandler}>
                         <p className="font-bold text-sm text-left" >{props?.chatname}</p>
-                        <p className=" text-xs text-left w-[50%] truncate " > {props?.latestmessage} </p>
+                        {
+                           getUnreadCountForChat(props.id)===0 ?
+                           <p className=" text-xs text-left w-[50%] truncate " > {props?.latestmessage}</p>:
+                           <p className=" text-xs text-red-400 text-left italic " > +{getUnreadCountForChat(props.id)} new unread messages</p>
+                        }
                     </div>
                     </Link>
                 </div>
