@@ -36,9 +36,7 @@ const sendMessageController=expressAsyncHandler(async(req,res)=>{
             }
         }));
 
-        const io = req.app.get('io');
-        io.to(req.params.chatId).emit("message received", message);
-        
+       
         res.status(201).json(message);
     } catch (error) {
         res.status(500);

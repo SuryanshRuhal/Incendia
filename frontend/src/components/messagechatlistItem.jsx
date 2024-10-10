@@ -18,7 +18,8 @@ const ChatListItem = (props) => {
                     Authorization: `Bearer ${userData?.data?.token}`,
                 }
             }
-            const response = await axios.get(`https://incendia-api.onrender.com/chats/access/${props.userId}`, config);
+            console.log(props?.userId);
+            const response = await axios.get(`https://incendia-api.onrender.com/chats/access/${props?.userId}`, config);
             if (response.status === 200 ) {
                 nav(`chatArea/${response?.data?._id}`,{
                     state: { username:props?.chatname, avatar:props?.avatar}
