@@ -1,18 +1,18 @@
-import { createContext, useContext,useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
 
-const UnreadCountContext= createContext();
+const UnreadCountContext = createContext();
 
-export const useUnreadCount=()=>{
+export const useUnreadCount = () => {
     return useContext(UnreadCountContext);
-}
+};
 
-export const UnreadCountProvider=({children})=>{
-    const [unreadChats, setUnreadChats]= useState([]);
+export const UnreadCountProvider = ({ children }) => {
+    const [unreadChats, setUnreadChats] = useState([]);
     const [userData, setUserData] = useState(() => {
         const data = localStorage.getItem("userData");
         return data ? JSON.parse(data) : null;
-    })
+    });
 
     const fetchUnreadChats = async (token) => {
         try {
@@ -22,20 +22,39 @@ export const UnreadCountProvider=({children})=>{
                     Authorization: `Bearer ${token}`,
                 },
             };
-            const response = await axios.get(`https://incendia-api.onrender.com/messages/unread`, config);
+            const response = await axios.get(
+                "https://incendia-api.onrender.com/messages/unread",
+                config
+            );
             setUnreadChats(response.data);
         } catch (error) {
             console.log("Error fetching unread chats:", error);
         }
     };
 
-  
     useEffect(() => {
-        const userData = JSON.parse(localStorage.getItem("userData"));
+       
         if (userData && userData.token) {
             fetchUnreadChats(userData.token);
+        } else {
+            setUnreadChats([]); 
         }
-    }, [userData.token]);
+    }, [userData?.token]); 
+
+  
+    useEffect(() => {
+        const handleStorageChange = () => {
+            const data = localStorage.getItem("userData");
+            setUserData(data ? JSON.parse(data) : null);
+        };
+
+        window.addEventListener("storage", handleStorageChange);
+
+        return () => {
+            window.removeEventListener("storage", handleStorageChange);
+        };
+    }, []);
+
     const setUnreadChatsForUser = (chatList) => {
         setUnreadChats(chatList);
     };
@@ -49,15 +68,14 @@ export const UnreadCountProvider=({children})=>{
             if (chatIndex !== -1) {
                 const updatedChats = [...prevUnreadChats];
                 updatedChats[chatIndex].count += 1;
-                console.log(updatedChats[chatIndex].count)
+                console.log(updatedChats[chatIndex].count);
                 return updatedChats;
             } else {
                 return [...prevUnreadChats, { chat: chatId, count: 1 }];
             }
-    });
+        });
     };
 
-   
     const markChatAsRead = (chatId) => {
         setUnreadChats((prevUnreadChats) => {
             const updatedChats = prevUnreadChats.map((chat) => {
@@ -69,22 +87,33 @@ export const UnreadCountProvider=({children})=>{
             return updatedChats;
         });
     };
- 
+
     const resetUnreadChats = () => {
         setUnreadChats([]);
     };
 
-    const totalUnread = unreadChats.filter(chat => chat.count > 0).length;
-
+    const totalUnread = unreadChats.filter((chat) => chat.count > 0).length;
 
     const getUnreadCountForChat = (chatId) => {
-        const chat = unreadChats.find(chat => chat.chat.toString() === chatId.toString());
-        return chat ? chat.count : 0; 
+        const chat = unreadChats.find(
+            (chat) => chat.chat.toString() === chatId.toString()
+        );
+        return chat ? chat.count : 0;
+    };
+
+    const contextValue = {
+        unreadChats,
+        setUnreadChatsForUser,
+        addUnreadChat,
+        markChatAsRead,
+        resetUnreadChats,
+        totalUnread,
+        getUnreadCountForChat,
     };
 
     return (
-        <UnreadCountContext.Provider value={{ unreadChats, setUnreadChatsForUser, addUnreadChat, markChatAsRead, resetUnreadChats, totalUnread , getUnreadCountForChat}}>
+        <UnreadCountContext.Provider value={contextValue}>
             {children}
         </UnreadCountContext.Provider>
-    )
-}
+    );
+};
