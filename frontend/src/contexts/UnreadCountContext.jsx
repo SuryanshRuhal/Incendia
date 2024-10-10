@@ -96,7 +96,7 @@ export const UnreadCountProvider = ({ children }) => {
 
     const getUnreadCountForChat = (chatId) => {
         const chat = unreadChats.find(
-            (chat) => chat.chat.toString() === chatId.toString()
+            (chat) => chat?.chat?.toString() === chatId?.toString()
         );
         return chat ? chat.count : 0;
     };
