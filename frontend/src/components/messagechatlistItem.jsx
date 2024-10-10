@@ -54,9 +54,9 @@ const ChatListItem = (props) => {
                     <div className=" my-2 ml-2"   onClick={createChatHandler}>
                         <p className="font-bold text-sm text-left" >{props?.chatname}</p>
                         {
-                           getUnreadCountForChat(props.id)===0 ?
+                           getUnreadCountForChat(props?.id)===0 ?
                            <p className=" text-xs text-left w-[50%] truncate " > {props?.latestmessage}</p>:
-                           <p className=" text-xs text-red-400 text-left italic " > +{getUnreadCountForChat(props.id)} new unread messages</p>
+                           <p className=" text-xs text-red-400 text-left italic " > +{getUnreadCountForChat(props?.id)} new unread messages</p>
                         }
                     </div>
                     </Link>
