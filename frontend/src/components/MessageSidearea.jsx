@@ -59,7 +59,7 @@ const MessageSideArea = () => {
                     <div className='m-2 text-center italic'>Sorry, No following User Found 🥺</div>
                     :
                 followingList.map((list, index) => {
-                    return <ChatListItem key={list?._id} id={list._id} chatname={list?.username} avatar={list?.avatar} latestmessage={list?.latestmessage} />
+                    return <ChatListItem key={list?._id} id={list?._id} userId={list?.users[0]?._id} chatname={list?.users[0]?.username} avatar={list?.users[0]?.avatar}  latestmessage={list?.latestMessage}/>
                 })}
                 </div>
             </div>)}
