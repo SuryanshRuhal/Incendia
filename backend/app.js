@@ -8,7 +8,7 @@ const User= require("./modals/UserModel");
 dotenv.config();
 
 app.use(cors({
-  origin: "https://incendia-rho.vercel.app/"
+  origin: "*"
 }));
 
 const connectDb= async()=>{
