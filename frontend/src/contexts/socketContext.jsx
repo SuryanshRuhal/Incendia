@@ -14,51 +14,55 @@ export const useSocket = () => {
 
 export const SocketProvider = ({ children }) => {
     const [socket, setSocket] = useState(null);
-    
 
-    const {setUnreadChatsForUser,  addUnreadChat } = useUnreadCount();
+    const { setUnreadChatsForUser, addUnreadChat } = useUnreadCount();
     const userData = JSON.parse(localStorage.getItem("userData"));
 
     useEffect(() => {
+     
         if (!userData?.data?._id) {
             console.log("userdata not present");
             return;
         }
 
         const newSocket = io("https://incendia-api.onrender.com");
-        console.log(newSocket);
+        console.log("Initializing new socket:", newSocket);
         setSocket(newSocket);
 
-        newSocket.emit("setup", userData?.data);
+      
+        newSocket.emit("setup", userData.data);
 
         newSocket.on("connected", () => {
             console.log("Socket connected");
         });
 
+    
         newSocket.on("unread_counts", (unreadCounts) => {
             setUnreadChatsForUser(unreadCounts);
         });
-        
+   
         newSocket.on("message received", (newMessageRecieved) => {
-            if (newMessageRecieved.sender !== userData?.data?._id && newMessageRecieved.chat._id) {
-                    addUnreadChat(newMessageRecieved.chat._id);
+            if (newMessageRecieved.sender !== userData.data._id && newMessageRecieved.chat._id) {
+                addUnreadChat(newMessageRecieved.chat._id);
             }
         });
 
-        // Optionally handle 'typing' and 'stop typing' events globally
+       
         newSocket.on("typing", (room) => {
-            // You can implement global typing indicators here if needed
+            // Implement global typing indicators here if needed
+            console.log(`User is typing in room: ${room}`);
         });
 
         newSocket.on("stop typing", (room) => {
             // Handle global stop typing indicators
+            console.log(`User stopped typing in room: ${room}`);
         });
 
-       
         return () => {
+            console.log("Disconnecting socket:", newSocket);
             newSocket.disconnect();
         };
-    }, [userData.data.token]);
+    }, [userData?.data?.token]); 
 
     return (
         <SocketContext.Provider value={{ socket }}>
