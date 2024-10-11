@@ -39,7 +39,7 @@ const sendMessageController=expressAsyncHandler(async(req,res)=>{
 
         const io = req.app.get('io');
         io.to(req.params.chatId).emit("message received", message);
-        
+
         res.status(201).json(message);
     } catch (error) {
         res.status(500);
@@ -61,12 +61,12 @@ const fetchChatMessagesController= expressAsyncHandler(async(req,res)=>{
 
 const markChatAsReadController = expressAsyncHandler(async (req, res) => {
     const { chatId } = req.params;
-    console.log("chatId:", chatId);
     try {
-        const objectId = mongoose.Types.ObjectId(chatId);
+        // const objectId = mongoose.Types.ObjectId(chatId);
+        console.log("objectid")
         const result = await User.updateOne(
             { _id: req.user._id },
-            { $pull: { unreadChats: { chat: objectId } } } 
+            { $pull: { unreadChats: { chat:chatId } } } 
         );
         res.status(200).json({ message: "Chat marked as read" });
     } catch (error) {

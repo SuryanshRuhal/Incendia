@@ -34,10 +34,14 @@ const MessageChatArea=(props)=>{
             const response= await axios.get(`https://incendia-api.onrender.com/messages/fetchmessages/${chatId}`, config );
             setMessageList(response?.data);
             socket.emit("join chat", chatId);
-            const latestMessage = response?.data[response?.data.length - 1];
-            if (latestMessage && latestMessage.sender.toString() !== userData?.data?._id.toString()) {
+            const latestMessage = response?.data[response?.data?.length - 1];
+            console.log(latestMessage);
+            console.log(latestMessage?.sender.toString() );
+            console.log(userData?.data?._id.toString());
+            console.log(chatId);
+            if (latestMessage && latestMessage?.sender.toString() !== userData?.data?._id.toString()) {
                 markChatAsRead(chatId);
-                 await axios.put(`https://incendia-api.onrender.com/messages/markasread/${chatId}`, {}, config);
+                await axios.put(`https://incendia-api.onrender.com/messages/markasread/${chatId}`, {}, config);
             }
         } catch (error) {
             console.log(error);
@@ -101,6 +105,7 @@ const MessageChatArea=(props)=>{
             return;
         }
         const messageReceivedHandler =(newMessageRecieved)=>{
+            if(newMessageRecieved?.sender.toString()!== userData?.data?._id.toString()){
             if(chatId!==newMessageRecieved.chat._id.toString()){
                 addUnreadChat(newMessageRecieved.chat._id);
             }else{
@@ -114,8 +119,8 @@ const MessageChatArea=(props)=>{
                 }
                 axios.put(`https://incendia-api.onrender.com/messages/markasread/${chatId}`, {}, config)
             }
-        }
-
+        }}
+        
         socket.on("message received",messageReceivedHandler);
 
         return () => {
