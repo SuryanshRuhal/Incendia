@@ -1,5 +1,5 @@
 import SendIcon from '@mui/icons-material/Send';
-import MessageIcon from '@mui/icons-material/Message';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import axios from 'axios';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
@@ -93,7 +93,7 @@ const Comment = (props) => {
                                 <span className={`${props.size === 'lg' ? " inline" : " !hidden "} text-gray-500 hidden sm:inline`}> {props?.replycount} </span>
                             </div>
                             <div className={`flex flex-col sm:flex-row items-center bg-slate-100 py-1 px-2 rounded-xl gap-0 sm:gap-1 lg:gap-2 ${props.size === 'lg' ? "gap-4 " : props.size === 'sm' ? " !gap-0 " : " !gap-1"}`}>
-                                <MessageIcon className={`${props.size === 'sm' ? "!text-base" : ""} cursor-pointer !text-base `} onClick={fetchRepliesHandler} />
+                                <ExpandMoreIcon className={`${props.size === 'sm' ? "!text-base" : ""} cursor-pointer !text-base `} onClick={fetchRepliesHandler} />
                                 <span className={`${props.size === 'lg' ? " inline" : " !hidden "} hidden sm:inline text-gray-300`}>|</span>
                                 <span className={`${props.size === 'lg' ? " inline" : " !hidden "} hidden text-gray-500 text-center sm:inline`}>View Replies</span>
                             </div>

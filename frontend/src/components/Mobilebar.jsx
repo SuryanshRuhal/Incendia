@@ -3,7 +3,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ExploreIcon from '@mui/icons-material/Explore';
 import Badge from '@mui/material/Badge';
-import MapsUgcIcon from '@mui/icons-material/MapsUgc';
+import ChatIcon from '@mui/icons-material/Chat';
 import { useState } from 'react';
 import { useUnreadCount } from "../contexts/UnreadCountContext";
 const Mobilemenu = () => {
@@ -38,7 +38,7 @@ const Mobilemenu = () => {
                 <Link to="/chathome/chatArea">
                     <div className="flex items-center m-3 gap-2 ">
                     <Badge badgeContent={totalUnread} color="secondary">
-                        <MapsUgcIcon className="!h-8 !w-8 cursor-pointer self-end" />
+                        <ChatIcon className="!h-8 !w-8 cursor-pointer self-end" />
                       </Badge>  
                     </div>
                 </Link>

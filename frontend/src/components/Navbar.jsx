@@ -4,7 +4,7 @@ import img from "./logonav.png";
 import Badge from '@mui/material/Badge';
 import HomeIcon from '@mui/icons-material/Home';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import MapsUgcIcon from '@mui/icons-material/MapsUgc';
+import ChatIcon from '@mui/icons-material/Chat';
 import SearchIcon from '@mui/icons-material/Search';
 import { useState } from "react";
 import { useUnreadCount } from "../contexts/UnreadCountContext";
@@ -26,7 +26,7 @@ const Navbar = () => {
                     </Link>
                     <Link to="/chathome/chatArea" className="flex items-center gap-2">
                     <Badge badgeContent={totalUnread} color="secondary">
-                        <MapsUgcIcon/>
+                        <ChatIcon/>
                     </Badge>
                         <span>Chats</span>
                     </Link>
