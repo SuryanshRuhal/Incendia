@@ -63,7 +63,6 @@ const markChatAsReadController = expressAsyncHandler(async (req, res) => {
     const { chatId } = req.params;
     try {
         // const objectId = mongoose.Types.ObjectId(chatId);
-        console.log("objectid")
         const result = await User.updateOne(
             { _id: req.user._id },
             { $pull: { unreadChats: { chat:chatId } } } 

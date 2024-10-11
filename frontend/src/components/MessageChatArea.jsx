@@ -30,15 +30,11 @@ const MessageChatArea=(props)=>{
                     Authorization :`Bearer ${userData?.data?.token}`,
                 }
             }
-            console.log("new");
             const response= await axios.get(`https://incendia-api.onrender.com/messages/fetchmessages/${chatId}`, config );
             setMessageList(response?.data);
             socket.emit("join chat", chatId);
             const latestMessage = response?.data[response?.data?.length - 1];
-            console.log(latestMessage);
-            console.log(latestMessage?.sender.toString() );
-            console.log(userData?.data?._id.toString());
-            console.log(chatId);
+            
             if (latestMessage && latestMessage?.sender.toString() !== userData?.data?._id.toString()) {
                 markChatAsRead(chatId);
                 await axios.put(`https://incendia-api.onrender.com/messages/markasread/${chatId}`, {}, config);

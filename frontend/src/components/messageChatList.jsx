@@ -17,7 +17,6 @@ const MessageChatList = () => {
                 }
             }
             const response= await axios.get(`https://incendia-api.onrender.com/chats/fetchchats`,config);
-            console.log(response?.data)
             setChatlist(response?.data);
         } catch (error) {
             alert("Chat fetching failed!")

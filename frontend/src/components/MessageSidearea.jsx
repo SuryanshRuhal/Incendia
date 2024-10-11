@@ -29,7 +29,6 @@ const MessageSideArea = () => {
             const senduser= {chatuser: searchbar}
             const response = await axios.post(`https://incendia-api.onrender.com/chats/searchfollowing`, senduser, config);
             setVisible(true);
-            console.log(response?.data);
             setFollowingList(response?.data);
         } catch (error) {
             console.log(error.message);

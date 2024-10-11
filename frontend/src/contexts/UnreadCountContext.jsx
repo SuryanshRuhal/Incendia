@@ -9,6 +9,7 @@ export const useUnreadCount = () => {
 
 export const UnreadCountProvider = ({ children }) => {
     const [unreadChats, setUnreadChats] = useState([]);
+    const [count,setCount] = useState(0);
     const [userData, setUserData] = useState(() => {
         const data = localStorage.getItem("userData");
         return data ? JSON.parse(data) : null;
@@ -23,10 +24,10 @@ export const UnreadCountProvider = ({ children }) => {
                 },
             };
             const response = await axios.get(
-                "https://incendia-api.onrender.com/messages/unread",
+                "http://localhost:8080/messages/unread",
                 config
             );
-            setUnreadChats(response.data);
+            setUnreadChats(response?.data);
         } catch (error) {
             console.log("Error fetching unread chats:", error);
         }
@@ -34,8 +35,8 @@ export const UnreadCountProvider = ({ children }) => {
 
     useEffect(() => {
        
-        if (userData && userData.token) {
-            fetchUnreadChats(userData.token);
+        if (userData && userData?.token) {
+            fetchUnreadChats(userData?.token);
         } else {
             setUnreadChats([]); 
         }
@@ -60,9 +61,10 @@ export const UnreadCountProvider = ({ children }) => {
     };
 
     const addUnreadChat = (chatId) => {
+       
         setUnreadChats((prevUnreadChats) => {
             const chatIndex = prevUnreadChats.findIndex(
-                (chat) => chat.chat.toString() === chatId.toString()
+                (chat) => chat?.chat.toString() === chatId.toString()
             );
 
             if (chatIndex !== -1) {
