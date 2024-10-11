@@ -1,6 +1,7 @@
 const expressAsyncHandler= require("express-async-handler");
 const Message = require("../modals/messagemodel");
 const Chat= require("../modals/chatmodel");
+const mongoose = require("mongoose");
 const User= require("../modals/UserModel");
 
 const sendMessageController=expressAsyncHandler(async(req,res)=>{

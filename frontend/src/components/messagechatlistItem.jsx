@@ -25,7 +25,9 @@ const ChatListItem = (props) => {
                     state: { username:props?.chatname, avatar:props?.avatar}
             });
             } else if (response.status === 201) {
-                nav(`chatArea/${response?.data?._id}`);
+                nav(`chatArea/${response?.data?._id}`,{
+                    state: { username:props?.chatname, avatar:props?.avatar}
+                });
             }
         } catch (error) {
             if (error.status === 401) {
