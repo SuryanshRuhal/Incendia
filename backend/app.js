@@ -75,12 +75,4 @@ io.on("connection",async(socket)=>{
   socket.on("typing",(room)=>socket.in(room).emit("typing"));
   socket.on("stop typing",(room)=>socket.in(room).emit("stop typing"));
 
-  socket.on("new message",(newmessageRecieved)=>{
-    var chat= newmessageRecieved.chat;
-    if(!chat.users) return console.log("users not found")
-    chat.users.forEach(user=>{
-    if(user== newmessageRecieved.sender) return;
-    socket.in(user).emit("message received", newmessageRecieved) 
-    })
-  })
 }) 

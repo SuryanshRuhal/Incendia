@@ -55,7 +55,8 @@ const MessageChatArea=(props)=>{
             }
             const data= {content: newMessage};
             const response= await axios.post(`https://incendia-api.onrender.com/messages/newmessage/${chatId}`,data,config);
-            socket.emit("new message",response?.data);
+            // socket.emit("new message",response?.data);
+            setMessageList((prevMessages) => [...prevMessages, response.data]);
             setNewMessage("");
             
         } catch (error) {
@@ -94,9 +95,6 @@ const MessageChatArea=(props)=>{
         };
     },[socket])
 
-    useEffect(()=>{
-        fetchMessageHandler();
-    },[]);
 
     useEffect(()=>{
         if(!socket){
@@ -125,7 +123,10 @@ const MessageChatArea=(props)=>{
         };
     },[socket, chatId, addUnreadChat, markChatAsRead, userData])
 
-   
+    useEffect(()=>{
+        fetchMessageHandler();
+    },[chatId]);
+
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [messageList]);
