@@ -179,15 +179,7 @@ const Post = (props) => {
                         </span>
                     </div>
                 </div>
-                <div>
-                    <div className={` ${props.size === 'lg' ? " " : " !mt-3 "} mt-4 sm:mt-0 flex items-center bg-slate-100 gap-4 p-2 rounded-xl`}>
-                        <ShareIcon className=" cursor-pointer " />
-                        <span className="text-gray-300">|</span>
-                        <span className="text-gray-500">123
-                            <span className={`${props.size === 'sm' ? "hidden " : "inline"}`}> Share</span>
-                        </span>
-                    </div>
-                </div>
+                
             </div>
             {
                 loading ?
