@@ -119,7 +119,7 @@ const ProfilePage = () => {
                             userPosts.map((userPostItem, index) => {
                                 return <Post key={userPostItem?._id} postedby={userPostItem.postedby} id={userPostItem._id}
                                     postimg={userPostItem.postimg} caption={userPostItem.caption} likedby={userPostItem.likedby}
-                                    createdAt={userPostItem.createdAt} updatedAt={userPostItem.updatedAt} commentno={userPostItem?.comments?.length} size="lg" />
+                                    createdAt={userPostItem.createdAt} updatedAt={userPostItem.updatedAt} commentno={userPostItem?.comments} size="lg" />
                             })
                         }
                     </div>

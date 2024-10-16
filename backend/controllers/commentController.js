@@ -24,11 +24,15 @@ const createCommentController= expressAsyncHandler(async(req,res)=>{
                 $push: {reply: comment._id}
             }); 
           } 
-        await post.findByIdAndUpdate(req.params.postId,{
-            $push:{comments: comment._id}
-        });
-
-        res.status(201).json({ message: "Comment created successfully" });
+        const response=await post.findByIdAndUpdate(req.params.postId,
+            {$push:{comments: comment._id}},
+            {
+                new: true,
+                select: "comments"
+            }
+        );
+        console.log(response);
+        res.status(201).json(response);
    
     } catch (error) {
         res.status(500)

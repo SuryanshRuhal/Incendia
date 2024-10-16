@@ -27,12 +27,15 @@ const Post = (props) => {
     const [commentInput, setCommentInput] = useState(null);
     const [fetchComment, setFetchComment] = useState(false);
     const [firstComment, setFirstComment] = useState([]);
+    const [commentCount, setFirstCommentCount] = useState(props?.commentno);
     const [loading, setLoading] = useState(false);
 
     const userData = JSON.parse(localStorage.getItem("userData"));
     const videoRef = useRef(null);
+    const [debounceTimeout, setDebounceTimeout] = useState(null);
     const fileType = getFileType(props?.postimg);
     const likeHandler = async () => {
+        if (debounceTimeout) return;
         const previousState = isliked;
         setlike(!isliked);
         try {
@@ -47,6 +50,11 @@ const Post = (props) => {
         } catch (error) {
             console.log(error.message);
             setlike(previousState);
+        }finally {
+            const timeout = setTimeout(() => {
+                setDebounceTimeout(null);
+            }, 1500);
+            setDebounceTimeout(timeout); 
         }
     }
     useEffect(() => {
@@ -84,9 +92,8 @@ const Post = (props) => {
                 }
             }
             const payload = { comment: commentText };
-            await axios.post(`https://incendia-api.onrender.com/comments/postId/${props.id}/parentComment/${parentCommentId || ''}`, payload, config);
-
-
+            const response= await axios.post(`http://localhost:8080/comments/postId/${props.id}/parentComment/${parentCommentId || ''}`, payload, config);
+            setFirstCommentCount(response?.data?.comments);
         } catch (error) {
             console.log("Comment Not Created");
 
@@ -173,7 +180,7 @@ const Post = (props) => {
                     <div className={`flex items-center bg-slate-100 p-2 rounded-xl ${props.size === 'lg' ? "sm:gap-4 " : "gap-2 "} gap-2`}>
                         <MessageIcon className={`${props.size === 'sm' ? "!text-base" : ""} cursor-pointer `} onClick={fetchFirstCommentsHandler} />
                         <span className="text-gray-300">|</span>
-                        <span className="text-gray-500 text-xs sm:text-base">{props?.commentno}
+                        <span className="text-gray-500 text-xs sm:text-base">{commentCount?.length}
                             <span className={`${props.size === 'sm' ? "hidden " : "inline"} text-xs sm:text-base`}> Comment</span>
                         </span>
                     </div>

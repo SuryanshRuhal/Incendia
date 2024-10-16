@@ -75,7 +75,7 @@ const Feed = ({ size }) => {
                     posts.map((postitem, index) => {
                         return <Post key={postitem.uniqueKey} id={postitem._id} postedby={postitem.postedby} size={size}
                             likedby={postitem.likedby} postimg={postitem.postimg} caption={postitem.caption}
-                            createdAt={postitem.createdAt} updatedAt={postitem.updatedAt} commentno={postitem?.comments?.length} />
+                            createdAt={postitem.createdAt} updatedAt={postitem.updatedAt} commentno={postitem?.comments} />
                     })
                 }
             </div>
