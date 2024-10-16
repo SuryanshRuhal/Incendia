@@ -169,7 +169,7 @@ const Post = (props) => {
                     <div className={` ${props.size === 'sm' ? "gap-2 " : "sm:gap-4 "} gap-2 flex items-center bg-slate-100 p-2 rounded-xl`}>
                         {
                             (isliked) ?
-                                <FavoriteIcon className={`${props.size === 'sm' ? "!text-base" : ""} text-red-600 `} onClick={likeHandler} /> :
+                                <FavoriteIcon className={`${props.size === 'sm' ? "!text-base" : ""} text-red-600 cursor-pointer`} onClick={likeHandler} /> :
                                 <FavoriteBorderIcon className={`${props.size === 'sm' ? "!text-base" : ""} cursor-pointer `} onClick={likeHandler} />
                         }
                         <span className="text-gray-300">|</span>
