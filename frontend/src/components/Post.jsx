@@ -95,7 +95,7 @@ const Post = (props) => {
                 }
             }
             const payload = { comment: commentText };
-            const response= await axios.post(`http://localhost:8080/comments/postId/${props.id}/parentComment/${parentCommentId || ''}`, payload, config);
+            const response= await axios.post(`https://incendia-api.onrender.com/comments/postId/${props.id}/parentComment/${parentCommentId || ''}`, payload, config);
             setFirstCommentCount(response?.data?.comments);
         } catch (error) {
             console.log("Comment Not Created");

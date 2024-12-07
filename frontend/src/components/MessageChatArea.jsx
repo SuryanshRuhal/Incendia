@@ -82,7 +82,7 @@ const MessageChatArea=(props)=>{
                 content: newMessage,
                 mediaFileUrl:cloudinaryUrl
             };
-            const response= await axios.post(`http://localhost:8080/messages/newmessage/${chatId}`,data,config);
+            const response= await axios.post(`https://incendia-api.onrender.com/messages/newmessage/${chatId}`,data,config);
             // socket.emit("new message",response?.data);
             fileInputRef.current.value = null;
             setFile(null);

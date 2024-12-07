@@ -57,7 +57,7 @@ const FollowingUser = ({sh,size, posturl}) => {
                 Authorization: `Bearer ${userData?.data?.token}`,
             }
         }
-        const response= await axios.post(`http://localhost:8080/messages/sendPostToMultiple`,data,config);
+        const response= await axios.post(`https://incendia-api.onrender.com/messages/sendPostToMultiple`,data,config);
         setSelectedUser(new Set());
        } catch (error) {
         console.log(error.message);
