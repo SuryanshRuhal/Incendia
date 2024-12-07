@@ -8,7 +8,9 @@ const messageModel= mongoose.Schema({
     },
     content:{
         type:"String",
-        required: true,
+    },
+    attachMedia:{
+        type: String,
     },
     chat: {
         type: mongoose.Schema.Types.ObjectId,

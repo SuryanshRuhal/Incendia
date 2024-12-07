@@ -3,11 +3,13 @@ import React from "react";
 import { Backdrop, CircularProgress } from "@mui/material";
 import axios from "axios";
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import ShareIcon from '@mui/icons-material/Share';
 import MessageIcon from '@mui/icons-material/Message';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { useState, useEffect,useRef } from "react";
 import SendIcon from '@mui/icons-material/Send';
+import FollowingUser from "./following";
 
 const getFileType = (url) => {
     const extension = url.split('.').pop().toLowerCase(); 
@@ -25,6 +27,7 @@ const Post = (props) => {
     const [isliked, setlike] = useState(false);
     const [userlike, setUserLike] = useState(props.likedby);
     const [commentInput, setCommentInput] = useState(null);
+    const [showShare,setShowShare]= useState(false);
     const [fetchComment, setFetchComment] = useState(false);
     const [firstComment, setFirstComment] = useState([]);
     const [commentCount, setFirstCommentCount] = useState(props?.commentno);
@@ -166,7 +169,7 @@ const Post = (props) => {
             {/* Interaction*/}
             <div className={` ${props.size === 'lg' ? " " : " !flex-col !my-2 "} my-1 flex-col sm:flex-row flex items-center justify-between sm:my-4 text-sm `}>
                 <div className={`flex gap-6`}>
-                    <div className={` ${props.size === 'sm' ? "gap-2 " : "sm:gap-4 "} gap-2 flex items-center bg-slate-100 p-2 rounded-xl`}>
+                    <div className={` ${props.size === 'sm' ? "gap-2 " : "sm:gap-4 "} gap-1 flex items-center bg-slate-100 p-2 rounded-xl`}>
                         {
                             (isliked) ?
                                 <FavoriteIcon className={`${props.size === 'sm' ? "!text-base" : ""} text-red-600 cursor-pointer`} onClick={likeHandler} /> :
@@ -174,18 +177,28 @@ const Post = (props) => {
                         }
                         <span className="text-gray-300">|</span>
                         <span className="text-gray-500 text-xs sm:text-base">{userlike?.length}
-                            <span className={`${props.size === 'sm' ? "hidden " : " inline "} text-xs sm:text-base`}> Likes</span>
+                            <span className={`${props.size === 'lg' ? "inline " : "hidden "} text-xs sm:text-base`}> Likes</span>
                         </span>
                     </div>
-                    <div className={`flex items-center bg-slate-100 p-2 rounded-xl ${props.size === 'lg' ? "sm:gap-4 " : "gap-2 "} gap-2`}>
+                    <div className={`flex items-center bg-slate-100 p-2 rounded-xl ${props.size === 'lg' ? "sm:gap-4 " : "gap-2 "} gap-1`}>
                         <MessageIcon className={`${props.size === 'sm' ? "!text-base" : ""} cursor-pointer `} onClick={fetchFirstCommentsHandler} />
                         <span className="text-gray-300">|</span>
                         <span className="text-gray-500 text-xs sm:text-base">{commentCount?.length}
-                            <span className={`${props.size === 'sm' ? "hidden " : "inline"} text-xs sm:text-base`}> Comment</span>
+                            <span className={`${props.size === 'lg' ? "inline " : "hidden "} text-xs sm:text-base`}> Comment</span>
+                        </span>
+                    </div>
+                    <div className={`flex items-center bg-slate-100 p-2 rounded-xl ${props.size === 'lg' ? "sm:gap-4 " : "gap-2 "} gap-1`}>
+                        <ShareIcon className={`${props.size === 'sm' ? "!text-base" : ""} cursor-pointer `} onClick={()=>setShowShare(!showShare)} />
+                        <span className={`${props.size === 'lg' ? "inline " : "hidden "}text-gray-300`}>|</span>
+                        <span className="text-gray-500 text-xs sm:text-base">
+                            <span className={`${props.size === 'lg' ? "inline " : "hidden "} text-xs sm:text-base`}> Share</span>
                         </span>
                     </div>
                 </div>
                 
+            </div>
+            <div className={`${!showShare ? "hidden" : ""}`}>
+                <FollowingUser sh="sh" posturl={props?.postimg} size={props.size}/>
             </div>
             {
                 loading ?
@@ -204,7 +217,7 @@ const Post = (props) => {
                         </div>
                     </div>
             }
-
+           
             <div className={`${fetchComment ? "hidden" : ""}`}>
                 {firstComment.map((comment, i) => (
                     <Comment key={comment?.commentId} id={comment?.commentId} size={props.size} postid={props.id} username={comment?.commentedBy?.username}

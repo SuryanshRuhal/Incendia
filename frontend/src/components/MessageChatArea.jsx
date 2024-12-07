@@ -6,7 +6,7 @@ import { Link, useParams, useLocation, useNavigate } from 'react-router-dom';
 import MessageText from './Messagetext';
 import { useUnreadCount } from '../contexts/UnreadCountContext';
 import {useSocket} from "../contexts/socketContext";
-
+import AttachFileIcon from '@mui/icons-material/AttachFile';
 
 const MessageChatArea=(props)=>{
     const userData= JSON.parse(localStorage.getItem("userData"));
@@ -19,8 +19,18 @@ const MessageChatArea=(props)=>{
     const {username, avatar}= location.state||{};
     const [typing, setTyping]= useState(false);
     const [isTyping, setIsTyping]= useState(false);
+    const [file, setFile]= useState(null);
     const {addUnreadChat, markChatAsRead}= useUnreadCount();
+    const fileInputRef= useRef(null);
     const socket= useSocket();
+
+    const handleAddIconClick=()=>{
+        fileInputRef.current.click();
+    }
+    const handleFileChange=(e)=>{
+        setFile(e.target.files[0]);
+        alert("File selected Succesfully");
+    }
 
     const fetchMessageHandler=async()=>{
         try {
@@ -44,18 +54,38 @@ const MessageChatArea=(props)=>{
         }
     }
     const createMessageHandler=async()=>{
-        if (newMessage.trim() === "") return;
+        if(!file && newMessage.trim() === ""){
+            return;
+        }
         socket.emit("stop typing", chatId);
         try {
+            var cloudinaryUrl ="";
+            if(file){
+            const resourceType= file.type.startsWith("video/") ? "video" : "image";
+            const uploadPreset= file.type.startsWith("video/")? "Incendia-video" : "Incendia-image";
+            const formData= new FormData();
+            formData.append("file",file);
+            formData.append("resource_type",resourceType);
+            formData.append("upload_preset", uploadPreset);
+
+            const uploadResponse = await axios.post(`https://api.cloudinary.com/v1_1/dp6skj1a4/${resourceType}/upload`, formData);
+            cloudinaryUrl = uploadResponse.data.secure_url;
+        }
+
             const config={
                 headers:{
                    "Content-Type":"application/json",
                    Authorization: `Bearer ${userData?.data?.token}`, 
                 }
             }
-            const data= {content: newMessage};
-            const response= await axios.post(`https://incendia-api.onrender.com/messages/newmessage/${chatId}`,data,config);
+            const data= {
+                content: newMessage,
+                mediaFileUrl:cloudinaryUrl
+            };
+            const response= await axios.post(`http://localhost:8080/messages/newmessage/${chatId}`,data,config);
             // socket.emit("new message",response?.data);
+            fileInputRef.current.value = null;
+            setFile(null);
             setMessageList((prevMessages) => [...prevMessages, response.data]);
             setNewMessage("");
             
@@ -153,8 +183,8 @@ const MessageChatArea=(props)=>{
     <div className='flex flex-col flex-1 p-2 overflow-y-scroll flex-grow scrollbar-hide::-webkit-scrollbar scrollbar-hide'>
        { messageList.map((messages,i)=>{
         return(
-            <MessageText key={messages._id} content={messages?.content} senderid={messages?.sender}/>
-        )})}
+            <MessageText key={messages._id} content={messages?.content} attachMedia={messages.attachMedia} senderid={messages?.sender}/>
+        )})} 
         <div ref={messagesEndRef} />
     </div>
     {isTyping? <div className='ml-4 text-purple-950 italic '> Typing....</div> :<></>}
@@ -165,6 +195,8 @@ const MessageChatArea=(props)=>{
                                 createMessageHandler();
                             }
                         }}/>
+        <AttachFileIcon className={`cursor-pointer mr-2`} onClick={handleAddIconClick} />
+        <input type="file" className="hidden" ref={fileInputRef} onChange={handleFileChange} />
         <SendIcon className={`cursor-pointer mr-2`} onClick={createMessageHandler}/>
     </div>
     </div>
