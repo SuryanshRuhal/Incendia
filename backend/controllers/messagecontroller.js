@@ -52,7 +52,7 @@ const sendMessageController=expressAsyncHandler(async(req,res)=>{
 
 const fetchChatMessagesController= expressAsyncHandler(async(req,res)=>{
    try {
-    const messages= await Message.find({chat:chatId})
+    const messages= await Message.find({chat:req.params.chatId})
     .populate("chat", "users")
     .sort({updatedAt:1});
     res.status(201).json(messages);
